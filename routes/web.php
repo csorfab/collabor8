@@ -73,7 +73,8 @@ function mime_content_type_hack($filename) {
         'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
     );
 
-    $ext = strtolower(array_pop(explode('.',$filename)));
+    $arr = explode('.',$filename);
+    $ext = strtolower(array_pop($arr));
     if (array_key_exists($ext, $mime_types)) {
         return $mime_types[$ext];
     }

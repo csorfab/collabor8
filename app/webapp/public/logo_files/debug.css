@@ -1,0 +1,135 @@
+#debugHost {
+    font-size: 12px;
+    color:#4a4a4a;
+    height: 100%;
+}
+
+#debugHostBtn a {
+    background: url('http://d2t44wh9rnwl5y.cloudfront.net/gsc/ZLT51M/05/78/30/05783036a6e94ac3ae35737401554886/plugins/debug/styles/images/variables_on.png?token=ed534cb41682b57275ba043c39431bc3');
+    background: url('http://d2t44wh9rnwl5y.cloudfront.net/gsc/ZLT51M/05/78/30/05783036a6e94ac3ae35737401554886/plugins/debug/styles/images/variables_on.svg?token=5ab69379f066b2e468d6d14db45bc7a6'),linear-gradient(transparent, transparent);
+}
+
+.hashover #debugHostBtn a:hover {
+    background: url('http://d2v8ggac1o0f6z.cloudfront.net/gsc/ZLT51M/05/78/30/05783036a6e94ac3ae35737401554886/plugins/debug/styles/images/variables_hover.png?token=ad7437e9fef0bba5f6516fb86406e97f');
+    background: url('http://dxlfb468n8ekd.cloudfront.net/gsc/ZLT51M/05/78/30/05783036a6e94ac3ae35737401554886/plugins/debug/styles/images/variables_hover.svg?token=c7a9817c738a1276a90910e8ed0b0c3f'),linear-gradient(transparent, transparent);
+}
+
+#debugHostBtn a.selected, #debugHostBtn a.selected:hover {
+    background: url('http://d26uhratvi024l.cloudfront.net/gsc/ZLT51M/05/78/30/05783036a6e94ac3ae35737401554886/plugins/debug/styles/images/variables_off.png?token=1270948b221c776457e77e74625da88f');
+    background: url('http://d2v8ggac1o0f6z.cloudfront.net/gsc/ZLT51M/05/78/30/05783036a6e94ac3ae35737401554886/plugins/debug/styles/images/variables_off.svg?token=7c7a8aa7ef7b0948989f8c4aca75dd93'),linear-gradient(transparent, transparent);
+}
+
+#debugHeader .pageNameHeader {
+    padding-right: 0px;
+}
+
+#variablesClearLink {
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+#variablesClearLink:hover {
+    color: #0a6cd6;
+}
+
+#traceClearLink {
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+#traceClearLink:hover {
+    color: #0a6cd6;
+}
+
+#debugScrollContainer 
+{
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+    -webkit-overflow-scrolling: touch;
+}
+
+#debugContainer {
+        padding: 10px 10px 10px 10px;
+}
+
+.variableName
+{
+	font-weight: bold;
+}
+
+.variableDiv
+{
+    margin-bottom: 20px;
+    line-height: 16px;
+
+}
+
+#variablesContainer {
+    padding-bottom: 5px;
+    /*overflow: auto;*/
+}
+
+#traceContainer {
+    padding-top: 15px;
+    /*padding: 0px 10px 10px 10px;*/
+}
+
+.debugToolbarButton 
+{
+	font-size: 1em;
+	color: #069;
+}
+
+.axEventBlock {
+    display: inline-block;
+    width: 100%;
+    margin: 5px 0px 5px 0px;
+    line-height: 21px;
+}
+
+/*a.axEventBlock:hover {
+    background-color: #069;
+    color: white;
+}*/
+
+.axTime {
+    margin: 0px 0px 0px 0px;
+    font-size: 11px;
+    color: #b1b3b5;
+}
+
+.axLabel {
+    margin: 0px 0px 5px 0px;
+    font-family: 'Trebuchet MS';
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.lastAxEvent {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #c2c2c2;
+    padding-bottom: 10px;
+}
+
+.axEvent {
+    margin: 0px 0px 5px 0px;
+    font-weight: bold;
+}
+
+.axCase {
+    margin: 0px 0px 5px 8px;
+    font-style: italic;
+}
+
+.axAction {
+    margin: 0px 0px 5px 13px;
+}
+
+#traceEmptyState.emptyStateContainer {
+    margin-top: 0px;
+}
+
+.debugLinksContainer {
+    text-align: right;
+}

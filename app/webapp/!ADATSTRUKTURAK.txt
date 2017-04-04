@@ -1,0 +1,24 @@
+Offer:
+
+const {
+      numberOfParticipants,
+      description,
+      availability,
+      location,
+      languages,
+      online,
+      lab,
+      field,
+      type,
+      user,
+      organization
+    }
+
+organization:
+
+<Organization 
+    name={organization.name} 
+    uniname={organization.uniname} 
+    location={organization.location} 
+    image={organization.image} />
+        
