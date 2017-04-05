@@ -15,6 +15,10 @@ const defaultState = {
 let store = createStore(rootReducer, defaultState)
 
 ReactDOM.render(
-  <App />,
+  (
+    <Provider store={store}>
+      <App />
+    </Provider>
+  ),  
   document.getElementById('root')
 );

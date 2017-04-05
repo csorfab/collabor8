@@ -1,1 +1,0 @@
-function offer(state = )
