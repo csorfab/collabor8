@@ -7,39 +7,52 @@ import SessionManager from '../containers/SessionManager/index'
 class App extends React.Component {
     render() {
         const { offers, onAddClick, onRemoveAllClick } = this.props
-        
+
         return (
             <div>
-                <header className="navbar navbar-static-top">
+                <nav className="navbar navbar-inverse navbar-fixed-top">
                     <div className="container">
-                        <div className="navbar-header">Collabor8</div>
-                        <nav className="collapse navbar-collapse">
+                        <div className="navbar-header">
+                            <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                                <span className="sr-only">Toggle navigation</span>
+                                <span className="icon-bar"></span>
+                                <span className="icon-bar"></span>
+                                <span className="icon-bar"></span>
+                            </button>
+                            <a className="navbar-brand" href="#">collabor8</a>
+                        </div>
+                        <div id="navbar" className="navbar-collapse collapse">
                             <ul className="nav navbar-nav navbar-right">
-                                <li>How it works</li>
-                                <li><SessionManager /></li>
-                                <li>Request resource</li>
-                                <li>Offer resource</li>
+                                <SessionManager />
                             </ul>
-                        </nav>
+                        </div>
                     </div>
-                </header>
-                <div className="container c8-main-box">
-                    <h1>Access or share behavioral testing resources by collaborating with other researchers around the world.</h1>
-                    <div className="container-fluid">
-                        <div className="col-md-3">I'm looking for  test participants,</div>
-                        <div className="col-md-3">Who are located in or available online</div>
-                        <div className="col-md-3">Speaking any languages</div>
+                </nav>
+
+                <div className="jumbotron">
+                    <div className="container">
+                        <h1>Hello, world!</h1>
+                        <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
+                        <p><a className="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>
                     </div>
                 </div>
-                <button onClick={e => {
-                    e.preventDefault()
-                    onAddClick()
-                }}>ADd new </button>
-                <button onClick={e => {
-                    e.preventDefault()
-                    onRemoveAllClick()
-                }}>ReMove aLL </button>
-                <Offers offers={offers} />
+
+                <div className="container">
+                    <div className="row">
+                        <button onClick={e => { e.preventDefault(); onAddClick()}}>ADd new </button>
+                        <button onClick={e => {
+                            e.preventDefault()
+                            onRemoveAllClick()
+                        }}>ReMove aLL 
+                        </button>
+                    </div>
+                    <Offers offers={offers} />
+
+                    <hr />
+                    <footer>
+                        <p>&copy; 2016 Company, Inc.</p>
+                    </footer>
+                </div>
             </div>
         )
     }

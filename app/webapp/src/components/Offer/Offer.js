@@ -22,10 +22,10 @@ class Offer extends React.Component {
       user
     } = offer
 
-    let org = user.organization    
-    
+    let org = user.organization
+
     return (
-      <div className="container-fluid">
+      <div className="row">
         <div className="col-md-8">
           <h2>{numberOfParticipants} participants available
 for experiments</h2>
@@ -41,7 +41,7 @@ for experiments</h2>
           <p>Collaboration type: {type}</p>
         </div>
       </div>
-    )  
+    )
   }
 }
 
