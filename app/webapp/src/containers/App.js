@@ -39,11 +39,12 @@ class App extends React.Component {
 
                 <div className="container">
                     <div className="row">
-                        <button onClick={e => { e.preventDefault(); onAddClick()}}>ADd new </button>
+                        <button onClick={e => { e.preventDefault(); onAddClick() }}>Add new</button>
+                        &nbsp;
                         <button onClick={e => {
                             e.preventDefault()
                             onRemoveAllClick()
-                        }}>ReMove aLL 
+                        }}>Remove random (1-3)
                         </button>
                     </div>
                     <Offers offers={offers} />
