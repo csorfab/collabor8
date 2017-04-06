@@ -1,21 +1,40 @@
 import { combineReducers } from 'redux'
-import { ADD_OFFER, REMOVE_ALL_OFFERS, REMOVE_RANDOM_OFFERS, SIGNED_IN, LOGOUT } from '../actions'
+import { ADD_OFFER, REMOVE_ALL_OFFERS, REMOVE_RANDOM_OFFERS, SIGNED_IN, LOGOUT, UPDATE_STATUS, SET_GAUTH2 } from '../actions'
 
 
 const rootReducer = (state, action) => {
+    let fetchUser = () => {
+        let profile = state.auth2.currentUser.get().getBasicProfile()
+        return {
+            googleId: profile.getId(),
+            name: profile.getName(),
+            titles: 'MSc'
+        }
+    }
+
     switch (action.type) {
-        case LOGOUT:
-            return Object.assign({}, state, {
-                session: {
+        case SET_GAUTH2:
+            return Object.assign({}, state, { auth2: action.auth2 })
+        case UPDATE_STATUS:
+            if(state.auth2 === undefined)
+                return Object.assign({}, state, {session: {
                     signedIn: false,
                     user: {}
-                }
-            })
-        case SIGNED_IN:
+                }})
+
+            let isSignedIn = state.auth2.isSignedIn.get()
+            if(isSignedIn == state.session.signedIn) return state
+
             return Object.assign({}, state, {
-                session: {
+                session: isSignedIn ?
+                {
                     signedIn: true,
-                    user: action.user
+                    user: fetchUser()
+                }
+                :
+                {
+                    signedIn: false,
+                    user: {}
                 }
             })
         case ADD_OFFER:

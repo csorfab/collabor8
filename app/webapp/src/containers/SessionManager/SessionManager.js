@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { signedIn, logout } from '../../actions'
+import { signedIn, logout, updateStatus, setGAuth2 } from '../../actions'
 
 class Link extends React.Component {
   render() {
@@ -36,48 +36,58 @@ class SessionManager extends React.Component {
     
   }
 
+  getGoogleInit(updateStatus, setGAuth2) {
+    return () => {
+      let gapi = window.gapi
+
+      gapi.load('auth2', function () {
+        let auth2 = gapi.auth2.init({ client_id: '585712562710-cfb4erbilkj3pn7u1uo45ct78u5i7s4a.apps.googleusercontent.com' })
+        auth2.isSignedIn.listen(updateStatus)
+        setGAuth2(auth2)
+      });
+    }
+  }
+
+  componentDidMount() {
+    const { updateStatus, setGAuth2 } = this.props
+
+    window.googleInit = this.getGoogleInit(updateStatus, setGAuth2)
+    window.jQuery.getScript('https://apis.google.com/js/platform.js?onload=googleInit')
+  }
+
   render() {
-    const { session, onSignedIn, onLogoutClick } = this.props
-    let login = () => window.auth2.signIn().then(onSignedIn).catch((e) => console.log(e))
-    
+    const { session, updateStatus, auth2 } = this.props
+
+    let signIn = () => auth2.signIn()
+    let signOut = () => auth2.signOut()
+
     if(!session.signedIn){
       return (
         <li>
-          <Link onClick={login}>Sign in</Link>
+          <Link onClick={signIn}>Sign in</Link>
         </li>
       )
     }
 
     return (
       <Dropdown title={session.user.name}>
-        <li><Link onClick={onLogoutClick}>Sign out</Link></li>
+        <li><Link onClick={signOut}>Sign out</Link></li>
       </Dropdown>
     )  
   }
 }
 
 function mapStateToProps(state) {
-  let session = state.session
-  return { session }; // TODO
+  let { session, auth2 } = state
+  return { session, auth2 }; // TODO
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  onSignedIn: (googleUser) => {
-    let profile = googleUser.getBasicProfile()
-    let user = {
-      googleId: profile.getId(),
-      name: profile.getName(),
-      titles: 'MSc'
-    }
-
-    dispatch(signedIn(user))
+  updateStatus: () => {
+    dispatch(updateStatus())
   },
-
-  onLogoutClick: (e) => {
-    e.preventDefault()
-    window.auth2.signOut()
-
-    dispatch(logout())
+  setGAuth2: (auth2) => {
+    dispatch(setGAuth2(auth2))
   }
 })
 
