@@ -34,9 +34,9 @@
 
   <script>
     function googleInit() {
-      console.log('LOFASZ')
-
-      window.auth2 = gapi.auth2.getAuthInstance()
+      gapi.load('auth2', function () {
+        window.auth2 = gapi.auth2.init({ client_id: '585712562710-cfb4erbilkj3pn7u1uo45ct78u5i7s4a.apps.googleusercontent.com' });
+      });
     }
   </script>
 

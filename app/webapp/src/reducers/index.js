@@ -1,9 +1,16 @@
 import { combineReducers } from 'redux'
-import { ADD_OFFER, REMOVE_ALL_OFFERS, REMOVE_RANDOM_OFFERS } from '../actions'
-import { SIGNED_IN } from '../containers/SessionManager/constants'
+import { ADD_OFFER, REMOVE_ALL_OFFERS, REMOVE_RANDOM_OFFERS, SIGNED_IN, LOGOUT } from '../actions'
+
 
 const rootReducer = (state, action) => {
     switch (action.type) {
+        case LOGOUT:
+            return Object.assign({}, state, {
+                session: {
+                    signedIn: false,
+                    user: {}
+                }
+            })
         case SIGNED_IN:
             return Object.assign({}, state, {
                 session: {

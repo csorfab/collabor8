@@ -3,6 +3,13 @@ export const REMOVE_ALL_OFFERS = 'REMOVE_ALL_OFFERS'
 export const REMOVE_RANDOM_OFFERS = 'REMOVE_RANDOM_OFFERS'
 export const UPDATE_STATUS = 'UPDATE_STATUS'
 export const SIGNED_IN = 'SIGNED_IN'
+export const LOGOUT = 'LOGOUT'
+
+export const logout = () => (
+    {
+        type: LOGOUT
+    }
+)
 
 export const signedIn = (user) => ({
         type: SIGNED_IN,

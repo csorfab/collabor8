@@ -1,16 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { signedIn } from '../../actions'
+import { signedIn, logout } from '../../actions'
 
 class Link extends React.Component {
   render() {
-    let { href, children, onClick } = this.props
+    let { id, href, children, onClick } = this.props
 
     onClick = onClick || function(){ }
     href = href || '#'
 
+
+
     return (
-      <a href={href} onClick={onClick}>{children}</a>
+      <a id={id} href={href} onClick={onClick}>{children}</a>
     )
   }
 }
@@ -35,25 +37,20 @@ class SessionManager extends React.Component {
   }
 
   render() {
-    const { session, onSignedIn } = this.props
-
-
-    let $ = window.jQuery
-    window.onGoogleSignIn = onSignedIn;
-
-
+    const { session, onSignedIn, onLogoutClick } = this.props
+    let login = () => window.auth2.signIn().then(onSignedIn).catch((e) => console.log(e))
+    
     if(!session.signedIn){
       return (
         <li>
-          <Link onClick={() => $('.abcRioButton').click()}>Sign in</Link>
-          <div className="g-signin2" data-onsuccess="onGoogleSignIn" style={{position: 'absolute', left: '-9999px'}}></div>
+          <Link onClick={login}>Sign in</Link>
         </li>
       )
     }
 
     return (
       <Dropdown title={session.user.name}>
-        <li><Link onClick={() => window.auth2.disconnect()}>Sign out</Link></li>
+        <li><Link onClick={onLogoutClick}>Sign out</Link></li>
       </Dropdown>
     )  
   }
@@ -74,6 +71,13 @@ const mapDispatchToProps = (dispatch) => ({
     }
 
     dispatch(signedIn(user))
+  },
+
+  onLogoutClick: (e) => {
+    e.preventDefault()
+    window.auth2.signOut()
+
+    dispatch(logout())
   }
 })
 
