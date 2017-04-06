@@ -25,16 +25,16 @@ class Offer extends React.Component {
     let org = user.organization    
     
     return (
-      <div class="container-fluid">
-        <div class="col-md-8">
-          <h1>{numberOfParticipants} participants available
-for experiments</h1>
+      <div className="container-fluid">
+        <div className="col-md-8">
+          <h2>{numberOfParticipants} participants available
+for experiments</h2>
           <p>{description}</p>
           <p>Number of participants: {numberOfParticipants}</p>
           <p>Availability: {availability}</p>
           <p>Languages: {languages}</p>
         </div>
-        <div class="col-md-4">
+        <div className="col-md-4">
           <p>Offered by:</p>
           <User name={user.name} fields={user.fields} title={user.title} />
           <Organization name={org.name} uniname={org.uniname} location={org.location} image={org.image} />

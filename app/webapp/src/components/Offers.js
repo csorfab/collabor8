@@ -11,7 +11,7 @@ class Offers extends React.Component {
 
         return (
             <div>
-                {offers.map((offer) => <Offer offer={offer} />)}
+                {offers.map((offer) => <Offer offer={offer} key={offer.id} />)}
             </div>
         )
     }

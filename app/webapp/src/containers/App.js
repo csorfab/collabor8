@@ -1,16 +1,12 @@
 import React, { Props } from 'react'
 import { connect } from 'react-redux'
-import { addRandomOffer } from '../actions'
+import { addRandomOffer, removeAllOffers, removeRandomOffers } from '../actions'
 import Offers from '../components/Offers'
+import SessionManager from '../containers/SessionManager/index'
 
 class App extends React.Component {
     render() {
-        const { offers, onAddClick } = this.props
-
-        console.log('APP offers: ', offers)
-
-
-        console.log('props: ', this.props)        
+        const { offers, onAddClick, onRemoveAllClick } = this.props
         
         return (
             <div>
@@ -20,7 +16,7 @@ class App extends React.Component {
                         <nav className="collapse navbar-collapse">
                             <ul className="nav navbar-nav navbar-right">
                                 <li>How it works</li>
-                                <li>Sign up</li>
+                                <li><SessionManager /></li>
                                 <li>Request resource</li>
                                 <li>Offer resource</li>
                             </ul>
@@ -39,6 +35,10 @@ class App extends React.Component {
                     e.preventDefault()
                     onAddClick()
                 }}>ADd new </button>
+                <button onClick={e => {
+                    e.preventDefault()
+                    onRemoveAllClick()
+                }}>ReMove aLL </button>
                 <Offers offers={offers} />
             </div>
         )
@@ -55,6 +55,9 @@ function mapDispatchToProps(dispatch) {
     return {
         onAddClick: () => {
             dispatch(addRandomOffer())
+        },
+        onRemoveAllClick: () => {
+            dispatch(removeRandomOffers())
         }
     }
 }

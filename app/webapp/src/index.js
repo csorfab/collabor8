@@ -9,7 +9,11 @@ import css from './css/index.css'
 import rootReducer from './reducers/index'
 
 const defaultState = {
-  offers: []
+  offers: [],
+  session: {
+    signedIn: false,
+    user: { }
+  }
 }
 
 let store = createStore(rootReducer, defaultState)
