@@ -1,9 +1,17 @@
 <?php
 
 use Illuminate\Http\Request;
+//require_once '../vendor/autoload.php';
+
+
+
+
+
+
+
 
 /*
------------------------------------------------------------------
+---------------------------------------------------------
 | API Routes
 |--------------------------------------------------------------------------
 |
@@ -18,7 +26,18 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 }
 );
 
-Route::get('/authenticate/{method}/{id}', function ($method, $id) {
+// Route::get('/authenticate/{method}/{authToken}', function ($method, $authToken) {
+// 	echo 'anyad';
+// 	$client = new Google_Client();
+// 	$client->setAuthConfig('../config/client_credentials.json');
 	
-}
-);
+// 	$payload = $client->verifyIdToken($id_token);
+// 	if ($payload) {
+// 		$userid = $payload['sub'];
+// 		return response(['a' => 'lofasz']);
+// 	}
+// 	else {
+// 		return response(['a' => 'lofasz']);
+// 	}
+// }
+// );

@@ -48,6 +48,8 @@ class SessionManager extends React.Component {
     }
   }
 
+  
+  
   componentDidMount() {
     const { updateStatus, setGAuth2 } = this.props
 
@@ -80,6 +82,22 @@ class SessionManager extends React.Component {
 function mapStateToProps(state) {
   let { session, auth2 } = state
   return { session, auth2 }; // TODO
+}
+
+const fetchUser = () => {
+  let googleUser = state.auth2.currentUser.get()
+  let profile = googleUser.getBasicProfile()
+
+  let user = {
+    googleId: profile.getId(),
+    authToken: googleUser.getAuthResponse().id_token,
+    name: profile.getName(),
+    titles: 'MSc'
+  }
+
+  console.log(user)
+      
+  return user
 }
 
 const mapDispatchToProps = (dispatch) => ({

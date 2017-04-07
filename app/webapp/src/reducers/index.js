@@ -4,12 +4,19 @@ import { ADD_OFFER, REMOVE_ALL_OFFERS, REMOVE_RANDOM_OFFERS, SIGNED_IN, LOGOUT, 
 
 const rootReducer = (state, action) => {
     let fetchUser = () => {
-        let profile = state.auth2.currentUser.get().getBasicProfile()
-        return {
+        let googleUser = state.auth2.currentUser.get()
+        let profile = googleUser.getBasicProfile()
+
+        let user = {
             googleId: profile.getId(),
+            authToken: googleUser.getAuthResponse().id_token,
             name: profile.getName(),
             titles: 'MSc'
         }
+
+        console.log(user)        
+        
+        return user
     }
 
     switch (action.type) {

@@ -19,26 +19,29 @@ class User extends Authenticatable
 	
 	
 	
+	
 	/**
 	* The attributes that are mass assignable.
-			     *
-			     * @var array
-			     */
-			    protected $fillable = [
-			        'name', 'email', 'password',
-			    ];
+				     *
+				     * @var array
+				     */
+				    protected $fillable = [
+				        'name', 'email', 'password', 
+						'auth_type', 'auth_token', 'auth_id', 'fields_of_expertise', 'academic_titles'
+					];
+	
 	
 	
 	
 	
 	/**
 	* The attributes that should be hidden for arrays.
-			     *
-			     * @var array
-			     */
-			    protected $hidden = [
-			        'password', 'remember_token',
-			    ];
+				     *
+				     * @var array
+				     */
+				    protected $hidden = [
+					    'password', 'remember_token', 'auth_id', 'auth_token'
+				    ];
 	
 	public function lab(){
 		return $this->belongsTo(Lab::class);
