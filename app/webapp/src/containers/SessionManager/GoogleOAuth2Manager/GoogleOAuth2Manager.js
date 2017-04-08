@@ -2,14 +2,24 @@ import React from 'react';
 import { connect } from 'react-redux';
 //import { setGAuth2, updateAuthId } from './actions'
 
-class GoogleOAuth2Manager extends React.Component {
-  static propTypes = {
-      statusChangedCallback: Protypes.func,
-      registerCallback: Prototypes.func
+class GoogleOAuth2Manager {
+  // static propTypes = {
+  //     statusChangedCallback: Protypes.func,
+  //     registerCallback: Prototypes.func
+  // }
+
+  constructor(statusChangedCallback, registerCallback){
+    this.statusChangedCallback = statusChangedCallback
+    // this.registerCallback = registerCallback
+
+    window.googleInit = this.getGoogleInit()
+    window.jQuery.getScript('https://apis.google.com/js/platform.js?onload=googleInit')
+
+    registerCallback('google', callback);
   }
 
   getGoogleInit() {
-    const { statusChangedCallback } = this.props
+    const { statusChangedCallback } = this
     var that = this;
 
     return () => {
@@ -54,10 +64,7 @@ class GoogleOAuth2Manager extends React.Component {
   }
 
   componentDidMount() {
-    window.googleInit = this.getGoogleInit()
-    window.jQuery.getScript('https://apis.google.com/js/platform.js?onload=googleInit')
 
-    this.props.registerCallback('google', callback);
   }
 
   render = () => (
