@@ -6,24 +6,14 @@ export const LOGOUT = 'LOGOUT'
 export const UPDATE_STATUS = 'UPDATE_STATUS'
 export const SET_GAUTH2 = 'SET_GAUTH2'
 
-export const setGAuth2 = (auth2) => {
-    return {
-        type: SET_GAUTH2,
-        auth2
-    }
-}
-
-export const updateStatus = () => ({
-        type: UPDATE_STATUS
-})
 
 export const logout = () => ({
-        type: LOGOUT
+    type: LOGOUT
 })
 
 export const signedIn = (user) => ({
-        type: SIGNED_IN,
-        user: user
+    type: SIGNED_IN,
+    user: user
 })
 
 export function removeRandomOffers() {

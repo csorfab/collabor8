@@ -1,23 +1,11 @@
 import { combineReducers } from 'redux'
 import { ADD_OFFER, REMOVE_ALL_OFFERS, REMOVE_RANDOM_OFFERS, SIGNED_IN, LOGOUT, UPDATE_STATUS, SET_GAUTH2 } from '../actions'
 
+import { sessionReducer } from '../containers/SessionManager/reducer.js'
 
-const rootReducer = (state, action) => {
-    let fetchUser = () => {
-        let googleUser = state.auth2.currentUser.get()
-        let profile = googleUser.getBasicProfile()
 
-        let user = {
-            googleId: profile.getId(),
-            authToken: googleUser.getAuthResponse().id_token,
-            name: profile.getName(),
-            titles: 'MSc'
-        }
-
-        console.log(user)        
-        
-        return user
-    }
+/*const rootReducer = (state, action) => {
+    state = Object.assign({}, state, { session: sessionReducer(state, action)} )
 
     switch (action.type) {
         case SET_GAUTH2:
@@ -61,6 +49,11 @@ const rootReducer = (state, action) => {
         default:
             return state
     }
-}
+}*/
+
+const rootReducer = combineReducers({
+    session: sessionReducer,
+    offers: offerReducer
+});
 
 export default rootReducer

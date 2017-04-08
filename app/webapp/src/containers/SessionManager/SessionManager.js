@@ -1,67 +1,56 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { signedIn, logout, updateStatus, setGAuth2 } from '../../actions'
-
-class Link extends React.Component {
-  render() {
-    let { id, href, children, onClick } = this.props
-
-    onClick = onClick || function(){ }
-    href = href || '#'
-
-
-
-    return (
-      <a id={id} href={href} onClick={onClick}>{children}</a>
-    )
-  }
-}
-
-class Dropdown extends React.Component {
-  render() {
-    const { title, children } = this.props
-    return (
-      <li className="dropdown">
-        <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{title} <span className="caret"></span></a>
-        <ul className="dropdown-menu">
-          {children}
-        </ul>
-      </li>
-    )
-  }
-}
+//import { signedIn, logout, updateStatus, setGAuth2 } from '../../actions'
+import { updateSession } from './actions'
+import { Link, Dropdown } from './Misc'
 
 class SessionManager extends React.Component {
   static propTypes = {
     
   }
 
-  getGoogleInit(updateStatus, setGAuth2) {
-    return () => {
-      let gapi = window.gapi
+  callbacks = []
 
-      gapi.load('auth2', function () {
-        let auth2 = gapi.auth2.init({ client_id: '585712562710-cfb4erbilkj3pn7u1uo45ct78u5i7s4a.apps.googleusercontent.com' })
-        auth2.isSignedIn.listen(updateStatus)
-        setGAuth2(auth2)
-      });
-    }
+  statusChangedCallback(method, authId){
+    const $ = window.jQuery
+    const { updateSession } = this.props
+    
+    $.ajax('/authenticate/' + method + '/' + authId, { success: (data) => {
+      let session = {
+        authInfo: {
+          method,
+          authId
+        },
+        user: data
+      }
+
+      updateSession(session)
+    }});
   }
 
-  
-  
-  componentDidMount() {
-    const { updateStatus, setGAuth2 } = this.props
+  registerCallback(method, callback){
+    callbacks[method] = callback
+  }
 
-    window.googleInit = this.getGoogleInit(updateStatus, setGAuth2)
-    window.jQuery.getScript('https://apis.google.com/js/platform.js?onload=googleInit')
+  executeCallback(action){
+    const { session } = this.props
+
+    callbacks[session.authInfo.method](action)
+  }
+
+  signIn(){
+    executeCallback('SIGN_IN')
+  }
+
+  signOut(){
+    executeCallback('SIGN_OUT')
   }
 
   render() {
-    const { session, updateStatus, auth2 } = this.props
+    const { session } = this.props
 
-    let signIn = () => auth2.signIn()
-    let signOut = () => auth2.signOut()
+    // let signIn = () => auth2.signIn()
+    // let signOut = () => auth2.signOut()
 
     if(!session.signedIn){
       return (
@@ -80,32 +69,15 @@ class SessionManager extends React.Component {
 }
 
 function mapStateToProps(state) {
-  let { session, auth2 } = state
-  return { session, auth2 }; // TODO
+  let { session } = state
+  return { session };
 }
 
-const fetchUser = () => {
-  let googleUser = state.auth2.currentUser.get()
-  let profile = googleUser.getBasicProfile()
 
-  let user = {
-    googleId: profile.getId(),
-    authToken: googleUser.getAuthResponse().id_token,
-    name: profile.getName(),
-    titles: 'MSc'
-  }
-
-  console.log(user)
-      
-  return user
-}
 
 const mapDispatchToProps = (dispatch) => ({
-  updateStatus: () => {
-    dispatch(updateStatus())
-  },
-  setGAuth2: (auth2) => {
-    dispatch(setGAuth2(auth2))
+  updateSession: (session) => {
+    dispatch(updateSession(session))
   }
 })
 
