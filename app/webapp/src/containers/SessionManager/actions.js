@@ -1,6 +1,18 @@
 // import {} from './constants';
 
-export const updateSession = (session) => ({
+export const deleteSession = (error) => {
+    updateSession('', 0, {}, false, error)
+}
+
+export const updateSession = (method, authId, user, signedIn = true, error) => ({
     type: 'UPDATE_SESSION',
-    session
+    session: {
+        authInfo: {
+            method,
+            authId
+        },
+        signedIn,
+        user,
+        error
+    }
 })

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 //import { setGAuth2, updateAuthId } from './actions'
 
-class GoogleOAuth2Manager {
+export class GoogleOAuth2Manager {
   // static propTypes = {
   //     statusChangedCallback: Protypes.func,
   //     registerCallback: Prototypes.func
@@ -10,12 +10,11 @@ class GoogleOAuth2Manager {
 
   constructor(statusChangedCallback, registerCallback){
     this.statusChangedCallback = statusChangedCallback
-    // this.registerCallback = registerCallback
-
+ 
     window.googleInit = this.getGoogleInit()
     window.jQuery.getScript('https://apis.google.com/js/platform.js?onload=googleInit')
 
-    registerCallback('google', callback);
+    registerCallback('google', (action) => this.callback(action));
   }
 
   getGoogleInit() {
@@ -29,8 +28,12 @@ class GoogleOAuth2Manager {
         let auth2 = gapi.auth2.init({ client_id: '585712562710-cfb4erbilkj3pn7u1uo45ct78u5i7s4a.apps.googleusercontent.com' })
         
         auth2.isSignedIn.listen(() => { 
-          let authId = auth2.currentUser.get().getAuthResponse().id_token;
-          statusChangedCallback('google', authId) 
+          if(auth2.isSignedIn.get()){
+            let authId = auth2.currentUser.get().getAuthResponse().id_token;
+            statusChangedCallback('google', authId)
+          } else {
+            statusChangedCallback('google', false)
+          }
         })
 
         that.auth2 = auth2
@@ -73,4 +76,4 @@ class GoogleOAuth2Manager {
   )
 }
 
-export default GoogleOAuth2Manager;
+export default GoogleOAuth2Manager

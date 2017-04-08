@@ -2,8 +2,12 @@
 
 namespace App\Http\Middleware;
 
+//require_once '../vendor/autoload.php';
+
+use Google_Client;
 use App\User;
 use Closure;
+use Illuminate\Support\Facades\Auth;
 
 class AuthenticateOAuth
 {
@@ -33,7 +37,9 @@ class AuthenticateOAuth
 		$payload = $client->verifyIdToken($authToken);
 		if(!$payload) 
             return false;
-		
+
+
+
 		$authId = $payload['sub'];
 		$user = User::where('auth_id', $authId)->first();
 		if($user){
@@ -42,6 +48,7 @@ class AuthenticateOAuth
 			
 			return $user;
 		}
+
 		
 		$user = User::create([
             'name' => $payload['name'],
@@ -58,11 +65,11 @@ class AuthenticateOAuth
 	}
 	
 	public function handle($request, Closure $next) {
-        $user = authenticateUserOAuth($request->auth['method'], $request->auth['authToken']);
+        $user = $this->authenticateUserOAuth($request->authMethod, $request->authId);
 		if(!$user) return response('authentication failed', 401);
 		
-        Auth::once($user);
-        
+        Auth::login($user);
+
         return $next($request);
 	}
 }

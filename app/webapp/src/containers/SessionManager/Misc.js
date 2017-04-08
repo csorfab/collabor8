@@ -1,3 +1,5 @@
+import React from 'react';
+
 export class Link extends React.Component {
   render() {
     let { id, href, children, onClick } = this.props

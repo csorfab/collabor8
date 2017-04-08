@@ -1,8 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 //import { signedIn, logout, updateStatus, setGAuth2 } from '../../actions'
-import { updateSession } from './actions'
+import { ajaxRequest } from '../../ajax'
+import { updateSession, deleteSession } from './actions'
 import { Link, Dropdown } from './Misc'
+import { GoogleOAuth2Manager } from './GoogleOAuth2Manager'
+
 
 class SessionManager extends React.Component {
   static propTypes = {
@@ -11,39 +14,49 @@ class SessionManager extends React.Component {
 
   callbacks = []
 
+
+
   statusChangedCallback(method, authId){
-    const $ = window.jQuery
     const { updateSession } = this.props
     
-    $.ajax('/authenticate/' + method + '/' + authId, { success: (data) => {
-      let session = {
-        authInfo: {
-          method,
-          authId
-        },
-        user: data
-      }
+    if(!authId) return deleteSession()
 
-      updateSession(session)
-    }});
+
+    ajaxRequest('/authenticate', {method, authId}, { 
+      success: (data) => {
+        updateSession(method, authId, data)
+      }, 
+      
+      error: (x, error) => {
+        deleteSession(error)
+      }
+    });
   }
 
   registerCallback(method, callback){
-    callbacks[method] = callback
+    this.callbacks[method] = callback
   }
 
-  executeCallback(action){
+  executeCallback(action, method){
     const { session } = this.props
 
-    callbacks[session.authInfo.method](action)
+    this.callbacks[method](action)
   }
 
-  signIn(){
-    executeCallback('SIGN_IN')
+  componentDidMount(){
+    let registerCallbackWrapped = (method, callback) => this.registerCallback(method, callback)
+    let statusChangedCallbackWrapped = (method, authId) => this.statusChangedCallback(method, authId)
+
+    this.callbacks = []
+    this.googleOAuth2Manager = new GoogleOAuth2Manager(statusChangedCallbackWrapped, registerCallbackWrapped)
   }
 
-  signOut(){
-    executeCallback('SIGN_OUT')
+  signIn(method){
+    this.executeCallback('SIGN_IN', method)
+  }
+
+  signOut(method){
+    this.executeCallback('SIGN_OUT', method)
   }
 
   render() {
@@ -55,14 +68,14 @@ class SessionManager extends React.Component {
     if(!session.signedIn){
       return (
         <li>
-          <Link onClick={signIn}>Sign in</Link>
+          <Link onClick={() => this.signIn('google')}>Sign in</Link>
         </li>
       )
     }
 
     return (
       <Dropdown title={session.user.name}>
-        <li><Link onClick={signOut}>Sign out</Link></li>
+        <li><Link onClick={() => this.signOut('google')}>Sign out</Link></li>
       </Dropdown>
     )  
   }
@@ -76,8 +89,8 @@ function mapStateToProps(state) {
 
 
 const mapDispatchToProps = (dispatch) => ({
-  updateSession: (session) => {
-    dispatch(updateSession(session))
+  updateSession: (method, authId, data, signedin, error) => {
+    dispatch(updateSession(method, authId, data, signedin, error))
   }
 })
 

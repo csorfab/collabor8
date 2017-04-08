@@ -26,6 +26,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 }
 );
 
+// Route::get('/authenticate', function () {
+// 	return Auth::user();
+// }
+// )->middleware('auth.oauth');
+
 // Route::get('/authenticate/{method}/{authToken}', function ($method, $authToken) {
 // 	echo 'anyad';
 // 	$client = new Google_Client();
