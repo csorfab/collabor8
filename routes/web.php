@@ -134,7 +134,7 @@ Route::get('/authenticate', function () {
     header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
     header('Access-Control-Allow-Headers: Origin, Content-Type, Accept, Authorization, X-Requested-With');
     header('Access-Control-Allow-Credentials: true');
-	return Auth::user();
+	return response(Auth::user());
 }
 )->middleware('auth.oauth');
 

@@ -17,7 +17,7 @@ class SessionManager extends React.Component {
 
 
   statusChangedCallback(method, authId){
-    const { updateSession } = this.props
+    const { updateSession, deleteSession } = this.props
     
     if(!authId) return deleteSession()
 
@@ -91,7 +91,8 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch) => ({
   updateSession: (method, authId, data, signedin, error) => {
     dispatch(updateSession(method, authId, data, signedin, error))
-  }
+  },
+  deleteSession: (error) => dispatch(deleteSession(error))
 })
 
 export default connect(

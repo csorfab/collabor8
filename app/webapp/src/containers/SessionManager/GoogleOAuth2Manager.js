@@ -17,6 +17,17 @@ export class GoogleOAuth2Manager {
     registerCallback('google', (action) => this.callback(action));
   }
 
+  _statusChangedCallback() {
+    const { auth2, statusChangedCallback } = this
+
+      if(auth2.isSignedIn.get()){
+        let authId = auth2.currentUser.get().getAuthResponse().id_token;
+        statusChangedCallback('google', authId)
+      } else {
+        statusChangedCallback('google', false)
+      }
+  }
+
   getGoogleInit() {
     const { statusChangedCallback } = this
     var that = this;
@@ -28,12 +39,7 @@ export class GoogleOAuth2Manager {
         let auth2 = gapi.auth2.init({ client_id: '585712562710-cfb4erbilkj3pn7u1uo45ct78u5i7s4a.apps.googleusercontent.com' })
         
         auth2.isSignedIn.listen(() => { 
-          if(auth2.isSignedIn.get()){
-            let authId = auth2.currentUser.get().getAuthResponse().id_token;
-            statusChangedCallback('google', authId)
-          } else {
-            statusChangedCallback('google', false)
-          }
+          that._statusChangedCallback();
         })
 
         that.auth2 = auth2
@@ -58,12 +64,16 @@ export class GoogleOAuth2Manager {
   // }
 
   callback(action){
+    const { statusChangedCallback } = this
+
     switch(action){
       case 'SIGN_IN':
         return this.auth2.signIn();
       case 'SIGN_OUT':
         return this.auth2.signOut();
     }
+
+    this._statusChangedCallback();
   }
 
   componentDidMount() {
