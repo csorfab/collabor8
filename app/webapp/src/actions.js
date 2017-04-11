@@ -30,29 +30,23 @@ export function removeAllOffers() {
 
 var offerId = 1
 
-export function addRandomOffer() {
+export function addRandomOffer(user) {
     return {
         type: ADD_OFFER,
         offer: {
-            id: offerId++,
+            id: -1,
             numberOfParticipants: Math.ceil(Math.random()*100),
             description: "We are offering 120 english speaking psychology BA students as \
                 participants for experiments.",
-            availability: "2017.03.02 - 2017.07.30",
-            location: "Budapest, Hungary",
+            availabilityFrom: "2017-03-02",
+            availabilityTill: "2018-03-02",
+            locationString: "Budapest, Hungary",
             languages: "Hungarian (native), Englsh",
-            online: 1,
-            lab: 1,
-            field: 0,
-            type: 2,
-            user: {
-                name: 'Ikszipsz Ilona',
-                organization: {
-                    name: 'Department of cognitive sciences',
-                    uniname: 'ELTE-PPK',
-                    location: 'Budapest'
-                }
-            }
+            online: true,
+            lab: true,
+            field: false,
+            type: 'pay',
+            user
         }
     }
 }

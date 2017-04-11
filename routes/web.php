@@ -2,7 +2,7 @@
 
 //TODO HACK
 
-
+use App\Offer;
 
 
 
@@ -129,14 +129,45 @@ Route::get('/', function(){
 );
 
 
-Route::get('/authenticate', function () {
-    header('Access-Control-Allow-Origin: *');
-    header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-    header('Access-Control-Allow-Headers: Origin, Content-Type, Accept, Authorization, X-Requested-With');
-    header('Access-Control-Allow-Credentials: true');
+Route::get('/api/authenticate', function () {
 	return response(Auth::user());
 }
-)->middleware('auth.oauth');
+)->middleware('auth.oauth')->middleware('nocsrf');
+
+Route::get('/api/offer/list', function(){
+	return response(Offer::orderBy('updated_at', 'desc')->get());
+})->middleware('nocsrf');
+
+Route::get('/api/offer/new', function(){
+	$newOffer = request()->all()['offer'];
+
+	$offer = new Offer($newOffer);
+	$offer->user_id = Auth::user()->id;
+
+	if($offer->save()){
+		return response($offer->toArray());
+	}
+})->middleware('auth.oauth')->middleware('nocsrf');
+
+Route::get('/api/offer/update', function () {
+    $user = Auth::user();
+	$newOffer = request()->all()['offer'];
+
+	$offer = Offer::find($newOffer['id']);
+
+	if(!$offer){
+		return response('Offer not found', 404);
+	}
+
+	if($offer->user_id != $user->id){
+		return response('Not your offer, gtfo', 403);
+	}
+
+	$offer->fill($newOffer);
+	$offer->save();
+
+	return response($offer);
+})->middleware('auth.oauth')->middleware('nocsrf');
 
 //Auth::routes();
 

@@ -7,7 +7,7 @@ class User extends React.Component {
   }
   render = () => (
     <div>
-      User
+      {this.props.name}
     </div>
   )
 }

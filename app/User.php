@@ -25,10 +25,10 @@ class User extends Authenticatable
 				     *
 				     * @var array
 				     */
-				    protected $fillable = [
-				        'name', 'email', 'password', 
-						'auth_type', 'auth_token', 'auth_id', 'fields_of_expertise', 'academic_titles'
-					];
+	protected $fillable = [
+		'name', 'email', 'password', 
+		'auth_type', 'auth_token', 'auth_id', 'fields_of_expertise', 'academic_titles'
+	];
 	
 	
 	
@@ -39,12 +39,17 @@ class User extends Authenticatable
 				     *
 				     * @var array
 				     */
-				    protected $hidden = [
-					    'password', 'remember_token', 'auth_id', 'auth_token'
-				    ];
+	protected $hidden = [
+		'password', 'remember_token', 'auth_id', 'auth_token'
+	];
 	
 	public function lab(){
 		return $this->belongsTo(Lab::class);
 	}
 	
+
+	public function offers(){
+		return $this->hasMany(Offer::class);
+	}
+
 }

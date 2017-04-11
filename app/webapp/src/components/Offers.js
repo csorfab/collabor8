@@ -5,7 +5,8 @@ class Offers extends React.Component {
     static propTypes = {
 
     }
-
+ 
+    
     render() {
         const { offers } = this.props
 
