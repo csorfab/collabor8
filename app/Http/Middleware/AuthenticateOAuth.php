@@ -8,6 +8,7 @@ use Google_Client;
 use App\User;
 use Closure;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthenticateOAuth
 {
@@ -30,9 +31,9 @@ class AuthenticateOAuth
             //  lehet, hogy ertelmetlen ez az egesz??
             // semikkepp nem akarom egy ervenytelen tokennel beengedni
             // tehat mindenkepp csekkolnom kell a guglival?
-		// $user = User::where('auth_token', $authToken)->first();
-		// if($user) 
-        //     return $user;
+		 $user = User::where('auth_token', $authToken)->first();
+		 if($user) 
+             return $user;
 		
 		$payload = $client->verifyIdToken($authToken);
 		if(!$payload) 

@@ -6,20 +6,28 @@ import SessionManager from '../containers/SessionManager/index'
 
 class UserEdit extends React.Component {
     render() {
-        const { offers, onAddClick, onRemoveAllClick } = this.props
+        const { session, onAddClick, onRemoveAllClick } = this.props
 
+        if (!session.signedIn) {
+            return (
+                <div>
+                    User not logged in
+                </div>
+            )
+        }        
+    
         return (
             <div>
-            JuzertEdit
+                {session.user.name}
             </div>
         )
     }
 }
 
 function mapStateToProps(state) {
-    const { offers } = state
+    const { session } = state
 
-    return { offers }
+    return { session }
 }
 
 function mapDispatchToProps(dispatch) {

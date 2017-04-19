@@ -80,9 +80,12 @@ class Offer extends React.Component {
             : (null)}
           </h2>
           <p>{description}</p>
-          <p><EditableField title="Number of participants" value={numberOfParticipants} editable={editing} onChange={this.getChangeCallback('numberOfParticipants')} /></p>
-          <p><EditableField title="Availability" value={availabilityFrom} editable={editing} onChange={this.getChangeCallback('availabilityFrom')} /></p>
-          <p>Languages: {languages}</p>
+          <div><EditableField type="number" title="Number of participants" value={numberOfParticipants} editable={editing} onChange={this.getChangeCallback('numberOfParticipants')} /></div>
+          <div>
+            <EditableField type="date" title="Availability" value={availabilityFrom} editable={editing} onChange={this.getChangeCallback('availabilityFrom')} />
+             <EditableField type="date" title=" - " value={availabilityTill} editable={editing} onChange={this.getChangeCallback('availabilityTill')} />
+          </div>
+            <p>Languages: {languages}</p>
         </div>
         <div className="col-md-4">
           <p>Offered by:</p>

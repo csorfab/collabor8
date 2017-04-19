@@ -1,8 +1,13 @@
 import React, { Props, PropTypes } from 'react'
+import DatePicker from 'react-datepicker'
+import moment from 'moment'
+require('react-datepicker/dist/react-datepicker.css')
+
 
 class EditableField extends React.Component {
     static propTypes = {
         title: PropTypes.string.isRequired,
+        type: PropTypes.string,
         validator: PropTypes.func,
         onChange: PropTypes.func,
         editable: PropTypes.bool.isRequired
@@ -23,9 +28,23 @@ class EditableField extends React.Component {
         })
     }
 
-    handleChange (event) {
-        let change = {
-            value: event.target.value.trim()
+    handleChange(event) {
+        const { type } = this.props
+
+        let change = {}
+
+        if (type === 'date') {
+            change.value = event.format('YYYY-MM-DD')
+        } else {
+            change.value = event.target.value
+        }
+        
+        // let change = {
+        //     value: event.target.value
+        // }
+
+        if (type === 'number') {
+            if (isNaN(Number(change.value))) return;
         }
 
         this.setState(change)        
@@ -33,21 +52,37 @@ class EditableField extends React.Component {
     }
 
     render() {
-        const { title, validator, editable } = this.props
+        const { title, validator, editable, type } = this.props
         const { value } = this.state
         
+        if (editable) {
+            var editor
+
+            switch(type) {
+                case 'text':
+                case 'number':
+                    editor = (
+                        <input type="text" value={value} onChange={this.handleChange} />
+                    )
+                    break;
+                case 'date':
+                    editor = (
+                        <DatePicker selected={moment(value)} onChange={this.handleChange} />
+                    )    
+            }
+
+            return (
+                <label>
+                    <b>{title}</b> {editor}
+                </label>
+            )
+        }    
+
         if (!editable) {
             return (
-                <p><b>{title}: </b>{value}</p>
+                <div className=""><b>{title}: </b>{value}</div>
             )
         }
-    
-        return (
-            <label>
-                {title}:
-                <input type="text" value={value} onChange={this.handleChange} />
-            </label>
-        )
     }
 }
 
