@@ -23,26 +23,26 @@ class AuthenticateOAuth
 			     * @return mixed
 			     */
 
-
-    private function authenticateUserOAuth($method, $authToken) {
+	private function verifyToken($token){
 		$client = new Google_Client();
 		$client->setAuthConfig('../config/client_secret.json');
 
-            //  lehet, hogy ertelmetlen ez az egesz??
-            // semikkepp nem akarom egy ervenytelen tokennel beengedni
-            // tehat mindenkepp csekkolnom kell a guglival?
-		 $user = User::where('auth_token', $authToken)->first();
-		 if($user) 
-             return $user;
+		return $client->verifyIdToken($token);
+	}
+
+    private function authenticateUserOAuth($method, $authToken) {
+		try {
+			$payload = $this->verifyToken($authToken);
+		} catch (BeforeValidException $e)  {
+			// leszarjuk
+		}
 		
-		$payload = $client->verifyIdToken($authToken);
 		if(!$payload) 
             return false;
 
-
-
 		$authId = $payload['sub'];
 		$user = User::where('auth_id', $authId)->first();
+
 		if($user){
 			$user->auth_token = $authToken;
 			$user->save();
@@ -50,18 +50,17 @@ class AuthenticateOAuth
 			return $user;
 		}
 
-		
 		$user = User::create([
             'name' => $payload['name'],
             'email' => $payload['email'],
             'password' => Hash::make($authId),
+			'image_url' => $payload['picture'],
             'auth_type' => 'google',
             'auth_token' => (string) $authToken,
             'auth_id' => $authId
-        ]);     
+        ]);
 
-		$user->save();
-		
+		$user->save();	
 		return $user;
 	}
 	

@@ -24,13 +24,12 @@ class CreateUsersTable extends Migration
 			$table->string('name');
 			$table->string('email')->unique();
 			$table->string('password');
-			$table->enum('auth_type', ['collabor8', 'fb', 'google', 'academia.edu']);
+			$table->enum('auth_type', ['collabor8', 'fb', 'google', 'academia.edu']);			
+			$table->text('auth_token')->nullable();
 			
-			//W			E CACHE THIS TO SKIP SERVERSIDE GOOGLE API CALL
-						$table->text('auth_token')->nullable();
-			
-			//U			NIQUE USER ID SUCH AS GOOGLE ID (ex.: 114166766152272042098)
-						$table->string('auth_id');
+			//UNIQUE USER ID SUCH AS GOOGLE ID (ex.: 114166766152272042098)
+			$table->string('auth_id');
+			$table->string('image_url');
 			
 			$table->string('fields_of_expertise')->default('');
 			$table->string('academic_titles')->default('');

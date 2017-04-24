@@ -1,4 +1,9 @@
-export const session = (state = {}, action) => {
+export const session = (state = {
+    signedIn: false,
+    user: {},
+    authInfo: {},
+    isFetching: false
+}, action) => {
     switch(action.type){
         case 'RECEIVE_SESSION':
             return {

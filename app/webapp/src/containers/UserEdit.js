@@ -1,35 +1,77 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import InlineEdit from 'react-edit-inline'
+import OffersContainer from './OffersContainer'
+import User from '../components/User'
+import { fetchUsers } from '../actions'
 
 class UserEdit extends React.Component {
-    render() {
-        const { session } = this.props
+    // constructor(props) {
+    //     super(props)
+    // }
 
-        if (!session.signedIn) {
-            return (
-                <div>
-                    User not logged in
-                </div>
-            )
-        }        
-    
-        return (
+    componentDidMount() {
+        const { fetchUsers } = this.props
+
+        fetchUsers()
+    }
+
+    render() {
+        function InlineEditable(props) {
+            const { editable } = props
+            
+            if (editable) {
+                return (<InlineEdit {...props} />)
+            } else {
+                return (<span>{props.text}</span>)
+            }                    
+        }
+
+        const { userid } = this.props.match.params
+        const { session, users } = this.props
+        const currentUser = session.user
+        const user = users.items.reduce((prev, curr) => { return curr.id == userid ? curr : prev }, {})
+                console.log(user)
+        const canEdit = session.signedIn && user.id === currentUser.id
+
+        return (           
             <div>
-                {session.user.name}
+                <div className="jumbotron">
+                    <div className="container">
+                        
+                        { !session.signedIn ?
+                            'User not signed in'
+                            :
+                        <div className="row">
+                            <div className="col-md-4">    
+                                    <User user={user} view="medium" editable={canEdit} />
+                                <InlineEditable text="lofasz" editable={canEdit}/>     
+                            </div>
+                        </div>    
+                            }
+                    </div>
+                </div>
+                { session.signedIn ? (
+                    <div className="container">
+                        <OffersContainer filter={(o) => o.user_id == user.id} />
+                    </div>
+                ) : ''}    
             </div>
         )
     }
 }
 
 function mapStateToProps(state) {
-    const { session } = state
+    const { session, users } = state
 
-    return { session }
+    return { session, users }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-
+        fetchUsers: () => {
+            dispatch(fetchUsers())
+        }
     }
 }
 

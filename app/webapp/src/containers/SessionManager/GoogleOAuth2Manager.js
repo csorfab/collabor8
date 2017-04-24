@@ -1,7 +1,7 @@
 import React from 'react';
 
 export class GoogleOAuth2Manager {
-  constructor(statusChanged, registerActionCallback, client_id) {
+  constructor(statusChanged, registerAction, client_id) {
     let that = this
 
     this.statusChanged = statusChanged
@@ -22,14 +22,15 @@ export class GoogleOAuth2Manager {
 
     window.jQuery.getScript('https://apis.google.com/js/platform.js?onload=googleInit')
 
-    registerActionCallback('google', (action) => this.dispatch(action));
+    registerAction((action) => this.dispatch(action));
   }
 
   signedInListener() {
     const { auth2, statusChanged } = this
 
       if(auth2.isSignedIn.get()){
-        let authToken = auth2.currentUser.get().getAuthResponse().id_token;
+        let authToken = auth2.currentUser.get().getAuthResponse().id_token
+        
         statusChanged(authToken)
       } else {
         statusChanged(false)
@@ -47,8 +48,6 @@ export class GoogleOAuth2Manager {
       default:
         break
     }
-
-    // this._statusChanged();
   }
 
   componentDidMount() {

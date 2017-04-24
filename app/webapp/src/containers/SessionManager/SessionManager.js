@@ -39,11 +39,11 @@ class SessionManager extends React.Component {
     this.callbacks[method](action)
   }
 
-  registerManager(id, Component, params) {
-    let registerCallback = this.registerCallback.bind(this)
-    let statusChanged = this.statusChanged.bind(this)
-    
-    this.managers[id] = new Component((authToken) => statusChanged(id, authToken), registerCallback, params)
+  registerManager(id, Class, params) {
+    // let registerCallback = this.registerCallback.bind(this)
+    // let statusChanged = this.statusChanged.bind(this)
+  
+    this.managers[id] = new Class((authToken) => this.statusChanged(id, authToken), (callback) => this.registerCallback(id, callback), params)
   }
 
   componentDidMount() {
@@ -76,7 +76,7 @@ class SessionManager extends React.Component {
 
     return (
       <Dropdown title={<FetchingIcon isFetching={session.isFetching}>{session.user.name}</FetchingIcon>}>
-        <li><Link to='/user'>Settings</Link></li>
+        <li><Link to={'/user/' + session.user.id}>Settings</Link></li>
         <li><a href='#' onClick={() => this.signOut()}>Sign out</a></li>
       </Dropdown>
     )  

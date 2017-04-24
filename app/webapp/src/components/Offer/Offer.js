@@ -89,7 +89,7 @@ class Offer extends React.Component {
         </div>
         <div className="col-md-4">
           <p>Offered by:</p>
-          <User name={user.name} fields={user.fields} title={user.title} />
+          <User user={user} view="small" />
           <Organization name={org.name} uniname={org.uniname} location={org.location} image={org.image} />
           <p>Collaboration type: {type}</p>
         </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Props, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Offer, { blankOffer } from '../../components/Offer/index'
 import { ajaxRequest } from '../../ajax'
@@ -7,7 +7,7 @@ import { FetchingIcon } from '../../components/Misc'
 
 class OffersContainer extends React.Component {
   static propTypes = {
-
+    filter: PropTypes.func
   }
 
   constructor(props) {
@@ -63,8 +63,12 @@ class OffersContainer extends React.Component {
   }
 
   render = () => {
-    const { offers, session, isFetching } = this.props
-    const { createOffer, saveNewOffer, cancelNewOffer } = this
+    let { offers, session, isFetching, filter } = this.props
+    const { createOffer, saveNewOffer, cancelNewOffer } = this    
+
+    if (!filter)
+      filter = () => true  
+    
     return (
       <div>
         <div className="offerEditor">
@@ -79,8 +83,8 @@ class OffersContainer extends React.Component {
           }
         </div>  
         
-        <FetchingIcon isFetching={isFetching} />
-        {offers.map((offer) => <Offer offer={offer} key={'OFFER_' + offer.id} onChange={this.changeHandler} editing={false} />)}
+        <FetchingIcon isFetching={isFetching} color="white" />
+        {offers.filter(filter).map((offer) => <Offer offer={offer} key={'OFFER_' + offer.id} onChange={this.changeHandler} editing={false} />)}
       </div>
     )
   }

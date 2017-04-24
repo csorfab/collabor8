@@ -1,23 +1,21 @@
 import React from 'react';
-import loadergif from '../images/ajax-loader.gif'
+import black from '../images/ajax-loader.gif'
+import white from '../images/ajax-loader-white.gif'
 
 
 export class FetchingIcon extends React.Component {
   render() {
-    if (this.props.isFetching) {
+    let { isFetching, color } = this.props
+    const images = { black, white }
+
+    if(!color) color = 'black'
+
       return (
         <span>
-          <img src={loadergif} style={{ marginRight: '10px' }} />
+          <img src={images[color]} style={{ marginRight: '10px', visibility: isFetching ? 'visible' : 'hidden' }} />
           {this.props.children}
         </span>  
       )
-    } else {
-      return (
-        <span>
-          {this.props.children}
-        </span>  
-      )
-    }
   }
 }
 

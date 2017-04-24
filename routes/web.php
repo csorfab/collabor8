@@ -3,6 +3,7 @@
 //TODO HACK
 
 use App\Offer;
+use App\User;
 
 
 
@@ -132,11 +133,11 @@ Route::get('/', function(){
 Route::get('/api/authenticate', function () {
 	return response(Auth::user());
 }
-)->middleware('auth.oauth')->middleware('nocsrf');
+)->middleware('auth.oauth')/*->middleware('nocsrf')*/;
 
 Route::get('/api/offer/list', function(){
 	return response(Offer::orderBy('updated_at', 'desc')->get());
-})->middleware('nocsrf');
+})/*->middleware('nocsrf')*/;
 
 Route::get('/api/offer/new', function(){
 	$newOffer = request()->all()['offer'];
@@ -147,7 +148,7 @@ Route::get('/api/offer/new', function(){
 	if($offer->save()){
 		return response($offer->toArray());
 	}
-})->middleware('auth.oauth')->middleware('nocsrf');
+})->middleware('auth.oauth')/*->middleware('nocsrf')*/;
 
 Route::get('/api/offer/update', function () {
     $user = Auth::user();
@@ -167,7 +168,12 @@ Route::get('/api/offer/update', function () {
 	$offer->save();
 
 	return response($offer);
-})->middleware('auth.oauth')->middleware('nocsrf');
+})->middleware('auth.oauth')/*->middleware('nocsrf')*/;
+
+
+Route::get('/api/user/list', function(){
+	return response(User::all());
+})/*->middleware('nocsrf')*/;
 
 //Auth::routes();
 

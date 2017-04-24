@@ -15,8 +15,15 @@ const defaultState = {
     didInvalidate: true
   },
   session: {
+    signedIn: false,
+    user: {},
+    authInfo: {},
+    isFetching: false
+  },
+  users: {
+    items: [],
     isFetching: false,
-    signedIn: false
+    didInvalidate: true
   }
 }
 

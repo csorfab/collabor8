@@ -17,7 +17,7 @@ const Root = ({ store }) => (
           <SessionManager />
         </NavBar>
         <Switch>
-          <Route path="/user" component={UserEdit} />
+          <Route path="/user/:userid" component={UserEdit} />
           <Route path="/" component={App} />
         </Switch>
       </div>

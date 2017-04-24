@@ -59,8 +59,25 @@ export function fetchOffers() {
         dispatch(requestOffers())
         ajaxRequest('/offer/list', getState().session.authInfo, {
             success: (offers) => {
-
                 dispatch(receiveOffers(offers))
+            }
+        })
+    }    
+}
+
+const receiveUsers = (users) => ({
+    type: 'RECEIVE_USERS',
+    users
+})
+
+const requestUsers = () => ({ type: 'REQUEST_USERS' })
+
+export function fetchUsers() {
+    return (dispatch, getState) => {        
+        dispatch(requestUsers())
+        ajaxRequest('/user/list', getState().session.authInfo, {
+            success: (users) => {
+                dispatch(receiveUsers(users))
             }
         })
     }    
