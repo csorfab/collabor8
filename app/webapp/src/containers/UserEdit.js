@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import InlineEdit from 'react-edit-inline'
+import InlineEditable from '../components/Misc'
 import OffersContainer from './OffersContainer'
 import User from '../components/User'
 import { fetchUsers } from '../actions'
@@ -17,15 +17,7 @@ class UserEdit extends React.Component {
     }
 
     render() {
-        function InlineEditable(props) {
-            const { editable } = props
-            
-            if (editable) {
-                return (<InlineEdit {...props} />)
-            } else {
-                return (<span>{props.text}</span>)
-            }                    
-        }
+
 
         const { userid } = this.props.match.params
         const { session, users } = this.props

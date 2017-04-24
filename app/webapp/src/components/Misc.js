@@ -1,7 +1,17 @@
 import React from 'react';
+import InlineEdit from 'react-edit-inline'
 import black from '../images/ajax-loader.gif'
 import white from '../images/ajax-loader-white.gif'
 
+export function InlineEditable(props) {
+  const { editable } = props
+
+  if (editable) {
+      return (<InlineEdit {...props} />)
+  } else {
+      return (<span>{props.text}</span>)
+  }                    
+}
 
 export class FetchingIcon extends React.Component {
   render() {
