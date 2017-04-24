@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Offer, { blankOffer } from '../../components/Offer/index'
 import { ajaxRequest } from '../../ajax'
+import { fetchOffers } from '../../actions'
+import { FetchingIcon } from '../../components/Misc'
 
 class OffersContainer extends React.Component {
   static propTypes = {
@@ -18,12 +20,8 @@ class OffersContainer extends React.Component {
 
   state = { creating: false }
 
-  componentWillMount() {
-    ajaxRequest('/offer/list', this.props.authInfo, {
-      success: (offers) => {
-        this.props.updateOffers(offers)
-      }
-    })
+  componentDidMount() {
+    this.props.fetchOffers()
   }
 
   createOffer() {
@@ -65,23 +63,32 @@ class OffersContainer extends React.Component {
   }
 
   render = () => {
-    const { offers, session } = this.props
+    const { offers, session, isFetching } = this.props
     const { createOffer, saveNewOffer, cancelNewOffer } = this
     return (
       <div>
-        {(this.state.creating) ? (
-          <Offer offer={this.state.newOffer} onChange={saveNewOffer} onCancel={cancelNewOffer} editing={true} />
-        ) : (session.signedIn) ? (
-            <button onClick={createOffer}>New offer</button>
-        ) : (<span>Not logged in</span>)}
-        {offers.map((offer) => <Offer offer={offer} key={offer.id} onChange={this.changeHandler} editing={false} />)}
+        <div className="offerEditor">
+          {
+            session.signedIn ? 
+              this.state.creating ? 
+                <Offer offer={this.state.newOffer} onChange={saveNewOffer} onCancel={cancelNewOffer} editing={true} />
+              :
+                <button onClick={createOffer}>New offer</button>
+            :
+            <span>Not logged in</span>
+          }
+        </div>  
+        
+        <FetchingIcon isFetching={isFetching} />
+        {offers.map((offer) => <Offer offer={offer} key={'OFFER_' + offer.id} onChange={this.changeHandler} editing={false} />)}
       </div>
     )
   }
 }
 
 const mapStateToProps = state => ({
-  offers: state.offers,
+  offers: state.offers.items,
+  isFetching: state.offers.isFetching,
   authInfo: state.session.authInfo,
   session: state.session
 });
@@ -93,11 +100,8 @@ const mapDispatchToProps = dispatch => ({
       offer
     })
   },
-  updateOffers: (offers) => {
-    dispatch({
-      type: 'UPDATE_OFFERS',
-      offers
-    })
+  fetchOffers: () => {
+    dispatch(fetchOffers())
   },
   addOffer: (offer) => {
     dispatch({

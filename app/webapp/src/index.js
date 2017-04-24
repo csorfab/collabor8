@@ -9,7 +9,11 @@ import rootReducer from './reducers/index'
 import Root from './Root'
 
 const defaultState = {
-  offers: [],
+  offers: {
+    items: [],
+    isFetching: false,
+    didInvalidate: true
+  },
   session: {
     isFetching: false,
     signedIn: false

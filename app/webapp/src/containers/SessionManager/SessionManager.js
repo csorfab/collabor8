@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { authenticate, deleteSession } from '../../actions'
+import { authenticate, deleteSession, abortedSessionFetch } from '../../actions'
 
 
 
-import { Dropdown, FetchingIcon } from './Misc'
+import { Dropdown, FetchingIcon } from '../../components/Misc'
 import { Link } from 'react-router-dom'
 
 
@@ -39,7 +39,7 @@ class SessionManager extends React.Component {
     this.callbacks[method](action)
   }
 
-  registerOAuthComponent(id, Component, params) {
+  registerManager(id, Component, params) {
     let registerCallback = this.registerCallback.bind(this)
     let statusChanged = this.statusChanged.bind(this)
     
@@ -47,7 +47,7 @@ class SessionManager extends React.Component {
   }
 
   componentDidMount() {
-    this.registerOAuthComponent('google', GoogleOAuth2Manager, GOOGLE_CLIENT_ID)
+    this.registerManager('google', GoogleOAuth2Manager, GOOGLE_CLIENT_ID)
   }
 
   signIn(method){
@@ -55,7 +55,7 @@ class SessionManager extends React.Component {
   }
 
   signOut() {
-    let method = this.props.session.authInfo.method
+    const { method } = this.props.session.authInfo
     this.executeCallback(method, { type: 'SIGN_OUT' })
   }
 
@@ -94,6 +94,7 @@ const mapDispatchToProps = (dispatch) => ({
   authenticate: (method, authToken) => {
     dispatch(authenticate(method, authToken))
   },
+  abortedSessionFetch: () => dispatch(abortedSessionFetch),
   deleteSession: (error) => dispatch(deleteSession(error))
 })
 

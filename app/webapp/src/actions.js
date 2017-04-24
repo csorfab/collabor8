@@ -35,7 +35,7 @@ export function authenticate(method, authToken) {
                 // deleteSession(error)
                 // no need to delete after a failed authentication attempt with server
             }
-        });
+        })
     }
 } 
 
@@ -43,8 +43,27 @@ export function deleteSession(error) {
     return dispatch => {
         dispatch(requestSession())
         setTimeout(() => dispatch(receiveSession({}, {}, false, error)), 500)
-        // delay csak a moka kedveert, ill igy erzi a juzer, hogy tortent valami
+        // delay csak a moka kedveert, ill igy erzi a juzer, hogy tortent valami:)
     }
+}
+
+const receiveOffers = (offers) => ({
+    type: 'RECEIVE_OFFERS',
+    offers
+})
+
+const requestOffers = () => ({ type: 'REQUEST_OFFERS' })
+
+export function fetchOffers() {
+    return (dispatch, getState) => {        
+        dispatch(requestOffers())
+        ajaxRequest('/offer/list', getState().session.authInfo, {
+            success: (offers) => {
+
+                dispatch(receiveOffers(offers))
+            }
+        })
+    }    
 }
 
 // export function deleteSession(error) {

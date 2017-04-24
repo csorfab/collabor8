@@ -1,5 +1,5 @@
 import React from 'react';
-import loadergif from '../../images/ajax-loader.gif'
+import loadergif from '../images/ajax-loader.gif'
 
 
 export class FetchingIcon extends React.Component {
