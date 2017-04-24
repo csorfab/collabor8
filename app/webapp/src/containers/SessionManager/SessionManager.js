@@ -1,19 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { authenticate, deleteSession, abortedSessionFetch } from '../../actions'
-
-
-
 import { Dropdown, FetchingIcon } from '../../components/Misc'
 import { Link } from 'react-router-dom'
-
-
-import GoogleOAuth2Manager from './GoogleOAuth2Manager'
-
-const GOOGLE_CLIENT_ID = '585712562710-cfb4erbilkj3pn7u1uo45ct78u5i7s4a.apps.googleusercontent.com'
-
-
-
 
 class SessionManager extends React.Component {
   static propTypes = {
@@ -39,15 +28,19 @@ class SessionManager extends React.Component {
     this.callbacks[method](action)
   }
 
-  registerManager(id, Class, params) {
-    // let registerCallback = this.registerCallback.bind(this)
-    // let statusChanged = this.statusChanged.bind(this)
-  
+  registerManager(id, manager) {
+    let { Class, params } = manager
     this.managers[id] = new Class((authToken) => this.statusChanged(id, authToken), (callback) => this.registerCallback(id, callback), params)
   }
 
   componentDidMount() {
-    this.registerManager('google', GoogleOAuth2Manager, GOOGLE_CLIENT_ID)
+    let managers = this.props.managersDescriptor
+
+    for (let id in managers) {
+      // if (!managers.hasOwnProperty(id)) continue;
+
+      this.registerManager(id, managers[id])
+    }
   }
 
   signIn(method){

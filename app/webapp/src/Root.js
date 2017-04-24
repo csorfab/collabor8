@@ -3,23 +3,24 @@ import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import App from './containers/App';
 import NavBar from './containers/Nav'
-import SessionManager from './containers/SessionManager'
 import UserEdit from './containers/UserEdit'
-//      <Route path="/user/edit/" component={UserEdit} />
-
-
+import Auth from './Auth'
 
 const Root = ({ store }) => (
   <Provider store={store}>
     <Router>
       <div>
         <NavBar>
-          <SessionManager />
+          <Auth />
         </NavBar>
         <Switch>
           <Route path="/user/:userid" component={UserEdit} />
           <Route path="/" component={App} />
         </Switch>
+                <hr />
+        <footer>
+            <p>&copy; 2016 Company, Inc.</p>
+        </footer>
       </div>
     </Router>
   </Provider>
