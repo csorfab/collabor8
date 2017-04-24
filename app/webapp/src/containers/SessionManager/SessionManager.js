@@ -1,10 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
-//import { signedIn, logout, updateStatus, setGAuth2 } from '../../actions'
-import { ajaxRequest } from '../../ajax'
-import { updateSession, deleteSession } from './actions'
-import { Link, Dropdown } from './Misc'
-import { GoogleOAuth2Manager } from './GoogleOAuth2Manager'
+import { authenticate, deleteSession } from '../../actions'
+
+
+
+import { Dropdown, FetchingIcon } from './Misc'
+import { Link } from 'react-router-dom'
+
+
+import GoogleOAuth2Manager from './GoogleOAuth2Manager'
+
+const GOOGLE_CLIENT_ID = '585712562710-cfb4erbilkj3pn7u1uo45ct78u5i7s4a.apps.googleusercontent.com'
+
+
 
 
 class SessionManager extends React.Component {
@@ -12,70 +20,64 @@ class SessionManager extends React.Component {
     
   }
 
-  callbacks = []
+  callbacks = {}
+  managers = {}
 
-
-
-  statusChangedCallback(method, authId){
-    const { updateSession, deleteSession } = this.props
+  statusChanged(method, authToken){
+    const { authenticate, deleteSession } = this.props
     
-    if(!authId) return deleteSession()
+    if(!authToken) return deleteSession()
 
-
-    ajaxRequest('/authenticate', {method, authId}, { 
-      success: (data) => {
-        updateSession(method, authId, data)
-      }, 
-      
-      error: (x, error) => {
-        deleteSession(error)
-      }
-    });
+    authenticate(method, authToken)
   }
 
   registerCallback(method, callback){
     this.callbacks[method] = callback
   }
 
-  executeCallback(action, method){
-    const { session } = this.props
-
+  executeCallback(method, action){
     this.callbacks[method](action)
   }
 
-  componentDidMount(){
-    let registerCallbackWrapped = (method, callback) => this.registerCallback(method, callback)
-    let statusChangedCallbackWrapped = (method, authId) => this.statusChangedCallback(method, authId)
+  registerOAuthComponent(id, Component, params) {
+    let registerCallback = this.registerCallback.bind(this)
+    let statusChanged = this.statusChanged.bind(this)
+    
+    this.managers[id] = new Component((authToken) => statusChanged(id, authToken), registerCallback, params)
+  }
 
-    this.callbacks = []
-    this.googleOAuth2Manager = new GoogleOAuth2Manager(statusChangedCallbackWrapped, registerCallbackWrapped)
+  componentDidMount() {
+    this.registerOAuthComponent('google', GoogleOAuth2Manager, GOOGLE_CLIENT_ID)
   }
 
   signIn(method){
-    this.executeCallback('SIGN_IN', method)
+    this.executeCallback(method, { type: 'SIGN_IN' })
   }
 
-  signOut(method){
-    this.executeCallback('SIGN_OUT', method)
+  signOut() {
+    let method = this.props.session.authInfo.method
+    this.executeCallback(method, { type: 'SIGN_OUT' })
   }
 
   render() {
     const { session } = this.props
 
-    // let signIn = () => auth2.signIn()
-    // let signOut = () => auth2.signOut()
-
     if(!session.signedIn){
       return (
         <li>
-          <Link onClick={() => this.signIn('google')}>Sign in</Link>
+          <a href='#' onClick={() => this.signIn('google')}>
+            <FetchingIcon isFetching={session.isFetching}>
+              Sign in
+            </FetchingIcon>
+          </a>
         </li>
       )
     }
 
     return (
-      <Dropdown title={session.user.name}>
-        <li><Link onClick={() => this.signOut('google')}>Sign out</Link></li>
+      <Dropdown title={<FetchingIcon isFetching={session.isFetching}>{session.user.name}</FetchingIcon>}>
+        <li><Link to='/user'>Settings</Link></li>
+        <li><a href='#' onClick={() => this.signOut()}>Sign out</a></li>
       </Dropdown>
     )  
   }
@@ -89,8 +91,8 @@ function mapStateToProps(state) {
 
 
 const mapDispatchToProps = (dispatch) => ({
-  updateSession: (method, authId, data, signedin, error) => {
-    dispatch(updateSession(method, authId, data, signedin, error))
+  authenticate: (method, authToken) => {
+    dispatch(authenticate(method, authToken))
   },
   deleteSession: (error) => dispatch(deleteSession(error))
 })

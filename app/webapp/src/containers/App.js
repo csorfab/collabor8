@@ -1,12 +1,11 @@
-import React, { Props } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
-import { addRandomOffer, removeAllOffers, removeRandomOffers } from '../actions'
 import OffersContainer from './OffersContainer/index'
 import { Link } from 'react-router-dom'
 
 class App extends React.Component {
     render() {
-        const { offers, onAddClick, onRemoveAllClick, user } = this.props
+        const { offers } = this.props
         
         return (
             <div>
@@ -39,12 +38,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        onAddClick: (user) => {
-            dispatch(addRandomOffer(user))
-        },
-        onRemoveAllClick: () => {
-            dispatch(removeRandomOffers())
-        }
+
     }
 }
 

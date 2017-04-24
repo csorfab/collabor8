@@ -66,7 +66,7 @@ class AuthenticateOAuth
 	}
 	
 	public function handle($request, Closure $next) {
-        $user = $this->authenticateUserOAuth($request->authMethod, $request->authId);
+        $user = $this->authenticateUserOAuth($request->authMethod, $request->authToken);
 		if(!$user) return response('authentication failed', 401);
 		
         Auth::login($user);

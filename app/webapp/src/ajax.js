@@ -5,11 +5,10 @@ export const ajaxRequest = (url, authInfo, params) => {
 
     if (!params) params = { data: {} }
     
-    const { authId, authMethod } = authInfo ? authInfo : { authId: 0, authMethod: ''}
-
-    params.data = Object.assign({}, params.data, {authId, authMethod})
-
-    params.data.authInfo = authInfo
+    const { authToken, authMethod } = authInfo ? authInfo : { authToken: 0, authMethod: ''}
+    params.data = Object.assign({}, params.data, {authToken, authMethod})
 
     $.ajax(ajax_host + url, params)
 }
+
+export default ajaxRequest

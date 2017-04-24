@@ -1,12 +1,9 @@
-import React, { Props } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
-import { addRandomOffer, removeAllOffers, removeRandomOffers } from '../actions'
-import Offers from '../components/Offers'
-import SessionManager from '../containers/SessionManager/index'
 
 class UserEdit extends React.Component {
     render() {
-        const { session, onAddClick, onRemoveAllClick } = this.props
+        const { session } = this.props
 
         if (!session.signedIn) {
             return (
@@ -32,12 +29,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        onAddClick: () => {
-            dispatch(addRandomOffer())
-        },
-        onRemoveAllClick: () => {
-            dispatch(removeRandomOffers())
-        }
+
     }
 }
 

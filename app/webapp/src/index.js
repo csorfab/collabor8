@@ -1,22 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux'
-import { createStore } from 'redux'
-import bootstrap_css from './css/bootstrap.css'
-import bootstrap_theme from './css/bootstrap-theme.css'
-import css from './css/index.css'
+import { createStore, applyMiddleware } from 'redux'
+import thunkMiddleware from 'redux-thunk'
+import './css/bootstrap.css'
+import './css/bootstrap-theme.css'
+import './css/index.css'
 import rootReducer from './reducers/index'
 import Root from './Root'
 
 const defaultState = {
   offers: [],
   session: {
-    signedIn: false,
-    user: { }
+    isFetching: false,
+    signedIn: false
   }
 }
 
-let store = createStore(rootReducer, defaultState)
+let store = createStore(
+  rootReducer,
+  defaultState,
+  applyMiddleware(thunkMiddleware)
+)
 
 ReactDOM.render(
   <Root store={store} />,  

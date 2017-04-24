@@ -1,17 +1,23 @@
 import React from 'react';
+import loadergif from '../../images/ajax-loader.gif'
 
-export class Link extends React.Component {
+
+export class FetchingIcon extends React.Component {
   render() {
-    let { id, href, children, onClick } = this.props
-
-    onClick = onClick || function(){ }
-    href = href || '#'
-
-
-
-    return (
-      <a id={id} href={href} onClick={onClick}>{children}</a>
-    )
+    if (this.props.isFetching) {
+      return (
+        <span>
+          <img src={loadergif} style={{ marginRight: '10px' }} />
+          {this.props.children}
+        </span>  
+      )
+    } else {
+      return (
+        <span>
+          {this.props.children}
+        </span>  
+      )
+    }
   }
 }
 

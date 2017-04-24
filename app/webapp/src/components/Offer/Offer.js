@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import styles from './Offer.css';
+import './Offer.css';
 import User from '../User/index'
 import Organization from '../Organization/index'
 import EditableField from '../EditableField'
