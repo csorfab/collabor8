@@ -21,9 +21,9 @@ use App\User;
 
 
 function mime_content_type_hack($filename) {
-	
+
 	$mime_types = array(
-	
+
 	'txt' => 'text/plain',
 							        'htm' => 'text/html',
 							        'html' => 'text/html',
@@ -34,7 +34,7 @@ function mime_content_type_hack($filename) {
 							        'xml' => 'application/xml',
 							        'swf' => 'application/x-shockwave-flash',
 							        'flv' => 'video/x-flv',
-	
+
 	// 	images
 							        'png' => 'image/png',
 							        'jpe' => 'image/jpeg',
@@ -47,37 +47,37 @@ function mime_content_type_hack($filename) {
 							        'tif' => 'image/tiff',
 							        'svg' => 'image/svg+xml',
 							        'svgz' => 'image/svg+xml',
-	
+
 	// 	archives
 							        'zip' => 'application/zip',
 							        'rar' => 'application/x-rar-compressed',
 							        'exe' => 'application/x-msdownload',
 							        'msi' => 'application/x-msdownload',
 							        'cab' => 'application/vnd.ms-cab-compressed',
-	
+
 	// 	audio/video
 							        'mp3' => 'audio/mpeg',
 							        'qt' => 'video/quicktime',
 							        'mov' => 'video/quicktime',
-	
+
 	// 	adobe
 							        'pdf' => 'application/pdf',
 							        'psd' => 'image/vnd.adobe.photoshop',
 							        'ai' => 'application/postscript',
 							        'eps' => 'application/postscript',
 							        'ps' => 'application/postscript',
-	
+
 	// 	ms office
 							        'doc' => 'application/msword',
 							        'rtf' => 'application/rtf',
 							        'xls' => 'application/vnd.ms-excel',
 							        'ppt' => 'application/vnd.ms-powerpoint',
-	
+
 	// 	open office
 							        'odt' => 'application/vnd.oasis.opendocument.text',
 							        'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
 							    );
-	
+
 	$arr = explode('.',$filename);
 	$ext = strtolower(array_pop($arr));
 	if (array_key_exists($ext, $mime_types)) {
@@ -101,7 +101,7 @@ function mime_content_type_hack($filename) {
 // 	$authToken = Route::input('authToken');
 // 	$user = authenticateUserOAuth($method, $authToken);
 
-//     if(!user) 
+//     if(!user)
 //         return false;
 
 //     return true;
@@ -129,52 +129,52 @@ Route::get('/', function(){
 }
 );
 
+Route::group(['middleware' => 'cors'], function(){
+    Route::get('/api/offer/list', function(){
+    	return response(Offer::orderBy('updated_at', 'desc')->get());
+    });
+});
 
-Route::get('/api/authenticate', function () {
-	return response(Auth::user());
-}
-)->middleware('auth.oauth')/*->middleware('nocsrf')*/;
-
-Route::get('/api/offer/list', function(){
-	return response(Offer::orderBy('updated_at', 'desc')->get());
-})/*->middleware('nocsrf')*/;
-
-Route::get('/api/offer/new', function(){
-	$newOffer = request()->all()['offer'];
-
-	$offer = new Offer($newOffer);
-	$offer->user_id = Auth::user()->id;
-
-	if($offer->save()){
-		return response($offer->toArray());
-	}
-})->middleware('auth.oauth')/*->middleware('nocsrf')*/;
-
-Route::get('/api/offer/update', function () {
-    $user = Auth::user();
-	$newOffer = request()->all()['offer'];
-
-	$offer = Offer::find($newOffer['id']);
-
-	if(!$offer){
-		return response('Offer not found', 404);
-	}
-
-	if($offer->user_id != $user->id){
-		return response('Not your offer, gtfo', 403);
-	}
-
-	$offer->fill($newOffer);
-	$offer->save();
-
-	return response($offer);
-})->middleware('auth.oauth')/*->middleware('nocsrf')*/;
+Route::group(['middleware' => ['auth.oauth','cors']], function(){
+    Route::get('/api/authenticate', function () {
+    	return response(Auth::user());
+    });
 
 
-Route::get('/api/user/list', function(){
-	return response(User::all());
-})/*->middleware('nocsrf')*/;
 
-//Auth::routes();
+    Route::get('/api/offer/new', function(){
+    	$newOffer = request()->all()['offer'];
 
-Route::get('/home', 'HomeController@index');
+    	$offer = new Offer($newOffer);
+    	$offer->user_id = Auth::user()->id;
+
+    	if($offer->save()){
+    		return response($offer->toArray());
+    	}
+    });
+
+    Route::get('/api/offer/update', function () {
+        $user = Auth::user();
+    	$newOffer = request()->all()['offer'];
+
+    	$offer = Offer::find($newOffer['id']);
+
+    	if(!$offer){
+    		return response('Offer not found', 404);
+    	}
+
+    	if($offer->user_id != $user->id){
+    		return response('Not your offer, gtfo', 403);
+    	}
+
+    	$offer->fill($newOffer);
+    	$offer->save();
+
+    	return response($offer);
+    });
+
+
+    Route::get('/api/user/list', function(){
+    	return response(User::all());
+    });
+});
