@@ -129,10 +129,9 @@ Route::get('/', function(){
 }
 );
 
+
 Route::group(['middleware' => 'cors'], function(){
-    Route::get('/api/offer/list', function(){
-    	return response(Offer::orderBy('updated_at', 'desc')->get());
-    });
+    Route::get('/api/offer/list','OfferController@list');
 });
 
 Route::group(['middleware' => ['auth.oauth','cors']], function(){
@@ -141,37 +140,8 @@ Route::group(['middleware' => ['auth.oauth','cors']], function(){
     });
 
 
-
-    Route::get('/api/offer/new', function(){
-    	$newOffer = request()->all()['offer'];
-
-    	$offer = new Offer($newOffer);
-    	$offer->user_id = Auth::user()->id;
-
-    	if($offer->save()){
-    		return response($offer->toArray());
-    	}
-    });
-
-    Route::get('/api/offer/update', function () {
-        $user = Auth::user();
-    	$newOffer = request()->all()['offer'];
-
-    	$offer = Offer::find($newOffer['id']);
-
-    	if(!$offer){
-    		return response('Offer not found', 404);
-    	}
-
-    	if($offer->user_id != $user->id){
-    		return response('Not your offer, gtfo', 403);
-    	}
-
-    	$offer->fill($newOffer);
-    	$offer->save();
-
-    	return response($offer);
-    });
+    Route::get('/api/offer/new','OfferController@new');
+    Route::get('/api/offer/update', 'OfferCOntroller@update');
 
 
     Route::get('/api/user/list', function(){

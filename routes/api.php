@@ -23,8 +23,7 @@ use Illuminate\Http\Request;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
 	return $request->user();
-}
-);
+});
 
 // Route::get('/authenticate', function () {
 // 	return Auth::user();
@@ -35,7 +34,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 // 	echo 'anyad';
 // 	$client = new Google_Client();
 // 	$client->setAuthConfig('../config/client_credentials.json');
-	
+
 // 	$payload = $client->verifyIdToken($id_token);
 // 	if ($payload) {
 // 		$userid = $payload['sub'];
