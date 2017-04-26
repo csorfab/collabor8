@@ -70,13 +70,10 @@ class SessionManager extends React.Component {
 
 }
 
-
 function mapStateToProps(state) {
   let { session } = state
   return { session };
 }
-
-
 
 const mapDispatchToProps = (dispatch) => ({
   authenticate: (method, authToken) => {
