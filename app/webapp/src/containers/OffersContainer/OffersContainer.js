@@ -12,10 +12,9 @@ class OffersContainer extends React.Component {
 
   constructor(props) {
     super(props)
-    this.changeHandler = this.changeHandler.bind(this)
-    this.createOffer = this.createOffer.bind(this)
-    this.saveNewOffer = this.saveNewOffer.bind(this)
-    this.cancelNewOffer = this.cancelNewOffer.bind(this)
+    // this.changeHandler = this.changeHandler.bind(this)
+    // this.saveNewOffer = this.saveNewOffer.bind(this)
+    // this.cancelNewOffer = this.cancelNewOffer.bind(this)
   }
 
   state = { creating: false }
@@ -24,33 +23,17 @@ class OffersContainer extends React.Component {
     this.props.fetchOffers()
   }
 
-  createOffer() {
-    this.setState({
-      creating: true,
-      newOffer: Object.assign(blankOffer(), {user: this.props.session.user})
-    })
-  }
-
-  saveNewOffer(offer) {
-    var that = this
-
-    ajaxRequest('/offer/new', this.props.authInfo, {
-      data: { offer },
-      success: (offer) => {
-        that.props.addOffer(offer)
-        that.setState({ creating: false })
-      },
-      error: () => {
-        // TODO error handling.
-      }
-    })
-  }
 
   cancelNewOffer() {
-    this.setState({ creating: false })
+    const { setCreating } = this.props
+    setCreating(false)
   }
 
-  changeHandler(newOffer) {
+  changeHandler(offer) {
+
+  }
+  
+  saveOffer(newOffer) {
     ajaxRequest('/offer/update', this.props.authInfo, {
       data: { offer: newOffer },
       success: (offer) => {
@@ -63,8 +46,8 @@ class OffersContainer extends React.Component {
   }
 
   render = () => {
-    let { offers, session, isFetching, filter } = this.props
-    const { createOffer, saveNewOffer, cancelNewOffer } = this    
+    let { offers, session, isFetching, isCreating, filter, creatingItem } = this.props
+    const { createNewOffer, saveNewOffer, cancelNewOffer, changeHandler } = this    
 
     if (!filter)
       filter = () => true  
@@ -74,10 +57,10 @@ class OffersContainer extends React.Component {
         <div className="offerEditor">
           {
             session.signedIn ? 
-              this.state.creating ? 
-                <Offer offer={this.state.newOffer} onChange={saveNewOffer} onCancel={cancelNewOffer} editing={true} />
+              isCreating ? 
+                <Offer offer={creatingItem} onChange={saveNewOffer}  onCancel={cancelNewOffer} editing={true} />
               :
-                <button onClick={createOffer}>New offer</button>
+                <button onClick={createNewOffer} className="btn btn-default">New offer</button>
             :
             <span>Not logged in</span>
           }
@@ -98,20 +81,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  updateOffer: (offer) => {
-    dispatch({
-      type: 'UPDATE_OFFER',
-      offer
-    })
-  },
   fetchOffers: () => {
     dispatch(fetchOffers())
-  },
-  addOffer: (offer) => {
-    dispatch({
-      type: 'ADD_OFFER',
-      offer
-    })
   }
 });
 

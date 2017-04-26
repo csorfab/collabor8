@@ -1,15 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import InlineEditable from '../components/Misc'
+import { InlineEditable } from '../components/Misc'
 import OffersContainer from './OffersContainer'
 import User from '../components/User'
 import { fetchUsers } from '../actions'
+import DatePicker from 'react-datepicker'
+import moment from 'moment'
+require('react-datepicker/dist/react-datepicker.css')
+
 
 class UserEdit extends React.Component {
-    // constructor(props) {
-    //     super(props)
-    // }
-
     componentDidMount() {
         const { fetchUsers } = this.props
 
@@ -17,14 +17,11 @@ class UserEdit extends React.Component {
     }
 
     render() {
-
-
         const { userid } = this.props.match.params
         const { session, users } = this.props
-        const currentUser = session.user
+
         const user = users.items.reduce((prev, curr) => { return curr.id == userid ? curr : prev }, {})
-                console.log(user)
-        const canEdit = session.signedIn && user.id === currentUser.id
+        const canEdit = session.signedIn && user.id === session.user.id
 
         return (           
             <div>
@@ -37,7 +34,7 @@ class UserEdit extends React.Component {
                         <div className="row">
                             <div className="col-md-4">    
                                     <User user={user} view="medium" editable={canEdit} />
-                                <InlineEditable text="lofasz" editable={canEdit}/>     
+                                    <InlineEditable text="PhD" editable={canEdit} paramName="titles" />
                             </div>
                         </div>    
                             }

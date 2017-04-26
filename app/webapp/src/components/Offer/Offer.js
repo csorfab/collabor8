@@ -2,60 +2,54 @@ import React, { PropTypes } from 'react';
 import './Offer.css';
 import User from '../User/index'
 import Organization from '../Organization/index'
-import EditableField from '../EditableField'
+import Field from '../Field'
 
 class Offer extends React.Component {
   static propTypes = {
+    offer: PropTypes.object.isRequired,
     editing: PropTypes.bool,
-    onChange: PropTypes.func,
-    onCancel: PropTypes.func
+    view: PropTypes.string,
+    onCancel: PropTypes.func,
+    onSave: PropTypes.func
   }
 
   constructor(props) {
     super(props)
-    this.onCancelClicked = this.onCancelClicked.bind(this)
-    this.onSaveClicked = this.onSaveClicked.bind(this)
-  }
-
-  state = {}  
-  
-  componentWillReceiveProps(newProps) {
-    this.setState({offer: newProps.offer})
-  }  
-  
-  componentWillMount() {
-    this.setState({offer: this.props.offer})
-  }
-
-  getChangeCallback(field) {
-    var that = this;
-
-    return (newValue) => {
-      that.setState({ offer: { ...that.state.offer, [field]: newValue } })
+    this.handleChange = this.handleChange.bind(this)
+    this.state = {
+      offer: props.offer
     }
-  }  
-  
-  onSaveClicked() {
-    const { onChange } = this.props
+  }
 
-    onChange(this.state.offer)
-  }  
+  componentWillReceiveProps(nextProps) {
+    this.setState({offer: nextProps.offer})
+  }
 
-  onCancelClicked() {
-    this.setState({ offer: this.props.offer })
-    this.props.onCancel && this.props.onCancel()
+  handleChange(event) {
+    const { name, value } = event
+
+    this.setState({
+      offer: {
+        ...this.state.offer,
+        [name]: value
+      }
+    });
   }
 
   render() {
-    const { onSaveClicked, onCancelClicked } = this
     const editing = this.props.editing || false
-    const { offer, onChange } = this.state
+    const { onCancel } = this.props
+    const { offer } = this.state
+    const onChange = this.handleChange
+
+    const onSave = () => this.props.onSave(this.state.offer)
+
     const {
       numberOfParticipants,
       description,
       availabilityFrom,
       availabilityTill,
-      location,
+      locationString,
       languages,
       online,
       lab,
@@ -67,17 +61,41 @@ class Offer extends React.Component {
     // let org = user.organization
     let org = {}
 
+    let radioYesNo = [{ label: 'Yes', value: 1}, { label: 'No', value: 0 }]
+
     return (
+      <div className="row">
+        <div className="col-md-8">
+          <span>
+            <button className="btn btn-default" onClick={onCancel}>Cancel</button>
+            <button className="btn btn-default" onClick={onSave}>Save</button>
+          </span>
+          <div className="form-horizontal">
+            <Field name="numberOfParticipants" title="Size of subject pool" type="number" value={numberOfParticipants} placeholder="Enter number of subjects you can offer for testing" onChange={onChange} />
+            <Field name="description" title="Description of subject population" type="textarea" value={description} onChange={onChange} placeholder="Give a description of the subject population (age, gender distribution, background etc." />
+            <Field name="locationString" title="Location of subjects" type="text" value={locationString} onChange={onChange} />
+            <Field name="online" title="Are subjects available for online (remote) testing?" type="radio" values={radioYesNo} value={online} onChange={onChange} />
+            <Field name="lab" title="Are subjects available for lab testing?" type="radio" values={radioYesNo} value={lab} onChange={onChange} />
+            <Field name="field" title="Are subjects available for field testing?" type="radio" values={radioYesNo} value={field} onChange={onChange} />
+            
+            <Field name="availabilityFrom" type="date" title="Subjects are available from" value={availabilityFrom} onChange={onChange} />
+            <Field name="availabilityTill" type="date" title="Subjects are available until" value={availabilityTill} onChange={onChange} />
+          </div>
+          </div>
+        <div className="col-md-4">
+          <p>Offered by:</p>
+          <User user={user} view="small" />
+          <Organization name={org.name} uniname={org.uniname} location={org.location} image={org.image} />
+          <p>Collaboration type: {type}</p>
+        </div>
+      </div>
+    )    
+    
+    /*return (
       <div className="row">
         <div className="col-md-8">
           <h2>
             {numberOfParticipants} participants available for experiments
-            {editing ? (
-              <span>
-                <button style={{ float: 'right' }} onClick={onCancelClicked}>Cancel</button>
-                <button style={{ float: 'right' }} onClick={onSaveClicked}>Save</button>
-               </span>)
-            : (null)}
           </h2>
           <p>{description}</p>
           <div><EditableField type="number" title="Number of participants" value={numberOfParticipants} editable={editing} onChange={this.getChangeCallback('numberOfParticipants')} /></div>
@@ -94,22 +112,9 @@ class Offer extends React.Component {
           <p>Collaboration type: {type}</p>
         </div>
       </div>
-    )    
+    )    */
   }
 }
 
-function mapStateToProps(state) {
-  return {}
-}
-
-const mapDispatchToProps = (dispatch) => ({
-  onEdited: (id, changes) => {
-    dispatch({
-      type: 'EDIT_OFFER',
-      id,
-      changes
-    })
-  }
-})
 
 export default Offer

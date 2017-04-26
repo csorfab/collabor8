@@ -141,7 +141,7 @@ Route::group(['middleware' => ['auth.oauth','cors']], function(){
 
 
     Route::get('/api/offer/new','OfferController@new');
-    Route::get('/api/offer/update', 'OfferCOntroller@update');
+    Route::get('/api/offer/update', 'OfferController@update');
 
 
     Route::get('/api/user/list', function(){

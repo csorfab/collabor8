@@ -17,7 +17,10 @@ const defaultState = {
   session: {
     signedIn: false,
     user: {},
-    authInfo: {},
+    authInfo: {
+      method: ''
+    },
+    actionQueue: [],
     isFetching: false
   },
   users: {

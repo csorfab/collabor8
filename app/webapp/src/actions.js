@@ -54,6 +54,19 @@ const receiveOffers = (offers) => ({
 
 const requestOffers = () => ({ type: 'REQUEST_OFFERS' })
 
+export function saveOffer(offer, callback) {        /// UGLY CALLBACK HACK, RETHINK OFFER STATE STORAGE
+    return (dispatch, getState) => {
+        ajaxRequest('/offer/update', getState().session.authInfo, {
+            data: { offer },
+            success: (offer) => {
+                dispatch({type: 'UPDATE_OFFER', offer})
+                callback(offer)
+            },
+            error: () => callback(false)
+        })
+    }
+}
+
 export function fetchOffers() {
     return (dispatch, getState) => {        
         dispatch(requestOffers())

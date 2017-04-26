@@ -34,7 +34,7 @@ class OfferController extends Controller
     	$offer = Offer::find($newOffer['id']);
 
     	if(!$offer){
-    		return response('Offer not found', 404);
+    		return $this->new();
     	}
 
     	if($offer->user_id != $user->id){

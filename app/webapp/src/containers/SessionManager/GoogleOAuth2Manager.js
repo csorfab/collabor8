@@ -2,21 +2,19 @@ import React from 'react';
 
 export class GoogleOAuth2Manager {
   constructor(statusChanged, registerAction, client_id) {
-    let that = this
-
     this.statusChanged = statusChanged
     
     window.googleInit = () => {
       let gapi = window.gapi
 
-      gapi.load('auth2', function () {
+      gapi.load('auth2', () => {
         let auth2 = gapi.auth2.init({ client_id })
         
         auth2.isSignedIn.listen(() => { 
-          that.signedInListener();
+          this.signedInListener();
         })
 
-        that.auth2 = auth2
+        this.auth2 = auth2
       })
     }
 
@@ -37,7 +35,9 @@ export class GoogleOAuth2Manager {
       }
   }
 
-
+  view() {
+    
+  }
 
   dispatch(action){
     switch(action.type){

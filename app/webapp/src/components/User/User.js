@@ -4,12 +4,16 @@ import styles from './User.css';
 
 class User extends React.Component {
   static propTypes = {
-    user: PropTypes.object.isRequired,
+    user: PropTypes.object,
     view: PropTypes.oneOf(['small', 'medium'])
   }
   
   render = () => {
-    const { user } = this.props
+    let { user } = this.props
+
+    if (!user) user = { name: 'Unknown User' }
+    
+
     const UserLink = () => (<Link to={'/user/' + user.id}>{user.name}</Link>)
 
     switch (this.props.view) {

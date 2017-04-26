@@ -33,6 +33,13 @@ function offers(state = {
                 items: action.offers
             }    
         case 'UPDATE_OFFER':
+            let offerExists = state.items.reduce((prev, curr) => curr.id === action.offer.id ? true : prev, false)
+            
+            if (!offerExists) return {
+                ...state,
+                items: [action.offer, ...state.items]
+            }
+
             return {
                 ...state,
                 items: state.items.map(o => offer(o, action))

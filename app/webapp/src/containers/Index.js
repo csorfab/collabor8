@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import OffersContainer from './OffersContainer/index'
 import { Link } from 'react-router-dom'
 
-class App extends React.Component {
+class Index extends React.Component {
     render() {
         const { offers } = this.props
         
@@ -38,4 +38,4 @@ function mapDispatchToProps(dispatch) {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(Index)
