@@ -1,7 +1,7 @@
 import React, { Props, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Offer, { blankOffer } from '../../components/Offer/index'
-import { ajaxRequest } from '../../ajax'
+// import { ajaxRequest } from '../../ajax'
 import { fetchOffers } from '../../actions'
 import { FetchingIcon } from '../../components/Misc'
 
@@ -29,20 +29,8 @@ class OffersContainer extends React.Component {
     setCreating(false)
   }
 
-  changeHandler(offer) {
-
-  }
-  
   saveOffer(newOffer) {
-    ajaxRequest('/offer/update', this.props.authInfo, {
-      data: { offer: newOffer },
-      success: (offer) => {
-        this.props.updateOffer(offer)
-      },
-      error: () => {
-        // TODO error handling.
-      }
-    })
+    // TODO
   }
 
   render = () => {

@@ -42,7 +42,7 @@ class Offer extends React.Component {
   render() {
     const editing = typeof this.props.editing === 'undefined' ? false : this.props.editing
     const { onCancel } = this.props
-    const { offer } = this.state
+    const { offer } = this.props
     const onChange = this.handleChange
 
     const onSave = () => this.props.onSave(this.state.offer)
