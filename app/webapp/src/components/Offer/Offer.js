@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import './Offer.css';
 import User from '../User/index'
+import { Link } from 'react-router-dom'
 import Organization from '../Organization/index'
 import Field from '../Field'
 
@@ -9,6 +10,7 @@ class Offer extends React.Component {
     offer: PropTypes.object.isRequired,
     editing: PropTypes.bool,
     view: PropTypes.string,
+    onChange: PropTypes.func,
     onCancel: PropTypes.func,
     onSave: PropTypes.func
   }
@@ -26,14 +28,15 @@ class Offer extends React.Component {
   }
 
   handleChange(event) {
-    const { name, value } = event
+    this.props.onChange(event)
+    // const { name, value } = event
 
-    this.setState({
-      offer: {
-        ...this.state.offer,
-        [name]: value
-      }
-    });
+    // this.setState({
+    //   offer: {
+    //     ...this.state.offer,
+    //     [name]: value
+    //   }
+    // });
   }
 
   render() {
@@ -45,6 +48,7 @@ class Offer extends React.Component {
     const onSave = () => this.props.onSave(this.state.offer)
 
     const {
+      id,
       numberOfParticipants,
       description,
       availabilityFrom,
@@ -69,6 +73,7 @@ class Offer extends React.Component {
           <span>
             <button className="btn btn-default" onClick={onCancel}>Cancel</button>
             <button className="btn btn-default" onClick={onSave}>Save</button>
+            <Link className="btn btn-default" to={"/offer/edit/" + id}>Edit</Link>
           </span>
           <div className="form-horizontal">
             <Field name="numberOfParticipants" title="Size of subject pool" type="number" value={numberOfParticipants} placeholder="Enter number of subjects you can offer for testing" onChange={onChange} />

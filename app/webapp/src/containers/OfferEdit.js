@@ -9,7 +9,8 @@ class OfferEdit extends React.Component {
     
     save(offer) {
         const { saveOffer } = this.props
-        saveOffer(offer, (offer) => {
+
+        saveOffer(offer, (offer) => {   // callback hack (?)
             if (offer)
                 this.props.history.push('/offer/view/' + offer.id)
         })
@@ -18,24 +19,35 @@ class OfferEdit extends React.Component {
     constructor(props) {
         super(props)
         this.save = this.save.bind(this)
+        this.handleChange = this.handleChange.bind(this)
 
         const { offers, session } = props
         let { offerid, action } = props.match.params        
-        let offer = blankOffer()
-
-        console.log(offerid, action)        
-
-                
+        let offer = blankOffer()      
         
         if (action !== 'new')
             offer = this.findOffer(offerid, props) || offer
         else
             offerid = -1
-        
+
+        console.log('constructo')
+
         this.state = {
             offer,
+            offerid,
             action
         }
+    }
+
+    handleChange(event) {
+        const { name, value } = event
+
+        this.setState({
+            offer: {
+                ...this.state.offer,
+                [name]: value
+            }
+        });
     }
 
     findOffer(id, props) {
@@ -52,15 +64,17 @@ class OfferEdit extends React.Component {
     componentWillReceiveProps(props) {
         let offer = this.findOffer(this.state.offerid, props)
 
-        if (offer) {
+        console.log(offer, this.state.offer)        
+
+        if (offer && (offer.id != this.state.offer.id)) {
             this.setState({ offer })
         } else {
-            this.setState({
-                offer: {
-                    ...this.state.offer,
-                    user: props.session.user
-                }
-            })
+            // this.setState({
+            //     offer: {
+            //         ...this.state.offer,
+            //         user: props.session.user
+            //     }
+            // })
         }
     }
 
@@ -77,7 +91,7 @@ class OfferEdit extends React.Component {
             <div>
                 <div className="jumbotron">
                     <div className="container">
-                        <Offer offer={offer} editing={editing} onSave={this.save} />
+                        <Offer offer={offer} editing={editing} onSave={this.save} onChange={this.handleChange} />
                     </div>
                 </div> 
             </div>

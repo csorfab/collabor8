@@ -3,11 +3,9 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import SessionView from './components/SessionView'
-import UserEdit from './containers/UserEdit'
-import OfferEdit from './containers/OfferEdit'
 import NavBar from './containers/Nav'
 import Auth from './Auth'
-import Index from './containers/Index'
+import Routes from './Routes'
 
 class App extends React.Component {
     render() {
@@ -23,12 +21,7 @@ class App extends React.Component {
                                 onSignOut={this.props.signOut}
                             />
                         </NavBar>
-                        <Switch>
-                            <Route path="/user/:userid" component={UserEdit} />
-                            <Route path="/offer/:action/:offerid" component={OfferEdit} />
-                            <Route path="/offer/:action" component={OfferEdit} />
-                            <Route path="/" component={Index} />
-                        </Switch>
+                        <Routes />
                         <hr />
                         <footer>
                             <p>&copy; 2016 Company, Inc.</p>

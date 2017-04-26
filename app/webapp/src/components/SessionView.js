@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { Dropdown, FetchingIcon } from './Misc'
 
 export class SessionView extends React.Component {
-    propTypes = {
+    static propTypes = {
         session: PropTypes.object.isRequired,
         onSignIn: PropTypes.func.isRequired,
         onSignOut: PropTypes.func.isRequired
