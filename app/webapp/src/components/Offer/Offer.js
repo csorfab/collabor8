@@ -40,7 +40,7 @@ class Offer extends React.Component {
   }
 
   render() {
-    const editing = this.props.editing || false
+    const editing = typeof this.props.editing === 'undefined' ? false : this.props.editing
     const { onCancel } = this.props
     const { offer } = this.state
     const onChange = this.handleChange
@@ -76,15 +76,15 @@ class Offer extends React.Component {
             <Link className="btn btn-default" to={"/offer/edit/" + id}>Edit</Link>
           </span>
           <div className="form-horizontal">
-            <Field name="numberOfParticipants" title="Size of subject pool" type="number" value={numberOfParticipants} placeholder="Enter number of subjects you can offer for testing" onChange={onChange} />
-            <Field name="description" title="Description of subject population" type="textarea" value={description} onChange={onChange} placeholder="Give a description of the subject population (age, gender distribution, background etc." />
-            <Field name="locationString" title="Location of subjects" type="text" value={locationString} onChange={onChange} />
-            <Field name="online" title="Are subjects available for online (remote) testing?" type="radio" values={radioYesNo} value={online} onChange={onChange} />
-            <Field name="lab" title="Are subjects available for lab testing?" type="radio" values={radioYesNo} value={lab} onChange={onChange} />
-            <Field name="field" title="Are subjects available for field testing?" type="radio" values={radioYesNo} value={field} onChange={onChange} />
+            <Field name="numberOfParticipants" title="Size of subject pool" type="number" value={numberOfParticipants} placeholder="Enter number of subjects you can offer for testing" onChange={onChange} editable={editing} />
+            <Field name="description" title="Description of subject population" type="textarea" value={description} onChange={onChange} placeholder="Give a description of the subject population (age, gender distribution, background etc." editable={editing} />
+            <Field name="locationString" title="Location of subjects" type="text" value={locationString} onChange={onChange} editable={editing} />
+            <Field name="online" title="Are subjects available for online (remote) testing?" type="radio" values={radioYesNo} value={online} onChange={onChange} editable={editing} />
+            <Field name="lab" title="Are subjects available for lab testing?" type="radio" values={radioYesNo} value={lab} onChange={onChange} editable={editing} />
+            <Field name="field" title="Are subjects available for field testing?" type="radio" values={radioYesNo} value={field} onChange={onChange} editable={editing} />
             
-            <Field name="availabilityFrom" type="date" title="Subjects are available from" value={availabilityFrom} onChange={onChange} />
-            <Field name="availabilityTill" type="date" title="Subjects are available until" value={availabilityTill} onChange={onChange} />
+            <Field name="availabilityFrom" type="date" title="Subjects are available from" value={availabilityFrom} onChange={onChange} editable={editing} />
+            <Field name="availabilityTill" type="date" title="Subjects are available until" value={availabilityTill} onChange={onChange} editable={editing} />
           </div>
           </div>
         <div className="col-md-4">
