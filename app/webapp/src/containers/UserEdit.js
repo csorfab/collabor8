@@ -4,8 +4,6 @@ import { InlineEditable } from '../components/Misc'
 import OffersContainer from './OffersContainer'
 import User from '../components/User'
 import { fetchUsers } from '../actions'
-import DatePicker from 'react-datepicker'
-import moment from 'moment'
 require('react-datepicker/dist/react-datepicker.css')
 
 

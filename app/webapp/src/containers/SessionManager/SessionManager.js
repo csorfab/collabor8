@@ -1,8 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { authenticate, deleteSession, abortedSessionFetch } from '../../actions'
-import { Dropdown, FetchingIcon } from '../../components/Misc'
-import { Link } from 'react-router-dom'
 
 class SessionManager extends React.Component {
   static propTypes = {

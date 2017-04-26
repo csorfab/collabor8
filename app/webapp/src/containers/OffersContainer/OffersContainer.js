@@ -1,7 +1,7 @@
 import React, { Props, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Offer, { blankOffer } from '../../components/Offer/index'
-// import { ajaxRequest } from '../../ajax'
+import { Link } from 'react-router-dom'
 import { fetchOffers } from '../../actions'
 import { FetchingIcon } from '../../components/Misc'
 
@@ -48,7 +48,7 @@ class OffersContainer extends React.Component {
               isCreating ? 
                 <Offer offer={creatingItem} onChange={saveNewOffer}  onCancel={cancelNewOffer} editing={true} />
               :
-                <button onClick={createNewOffer} className="btn btn-default">New offer</button>
+                <Link to="/offer/new" className="btn btn-default">New offer</Link>
             :
             <span>Not logged in</span>
           }

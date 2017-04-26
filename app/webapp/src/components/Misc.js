@@ -3,6 +3,12 @@ import InlineEdit from 'react-edit-inline'
 import black from '../images/ajax-loader.gif'
 import white from '../images/ajax-loader-white.gif'
 
+export function objFilter(obj, predicate) {
+  return Object.keys(obj)
+    .filter( (objKey) => predicate(obj[objKey], objKey) )
+    .reduce( (res, key) => ({ ...res, [key]: obj[key]}), {} )
+}
+
 export function InlineEditable(props) {
   const { editable } = props
 
@@ -22,7 +28,7 @@ export class FetchingIcon extends React.Component {
 
       return (
         <span>
-          <img src={images[color]} style={{ marginRight: '10px', visibility: isFetching ? 'visible' : 'hidden' }} />
+          <img src={images[color]} style={{ marginRight: '10px', visibility: isFetching ? 'visible' : 'hidden' }} alt="Loading..." />
           {this.props.children}
         </span>  
       )

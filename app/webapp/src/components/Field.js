@@ -13,6 +13,7 @@ require('react-datepicker/dist/react-datepicker.css')
 class Field extends React.Component {
     static propTypes = {
         title: PropTypes.string,
+        value: PropTypes.any.isRequired,
         name: PropTypes.string.isRequired,
         type: PropTypes.string.isRequired,
         placeholder: PropTypes.string,
@@ -30,15 +31,15 @@ class Field extends React.Component {
         this.handleChange = this.handleChange.bind(this)
 
         this.state = {
-            value: props.value,
+            // value: props.value,
             id: 'Field_' + Math.floor(Math.random()*100000000)
         }
     }
     
     componentWillReceiveProps(nextProps) {
-        this.setState({
-            value: nextProps.value
-        })
+        // this.setState({
+        //     value: nextProps.value
+        // })
     }
 
     validators = {
@@ -93,7 +94,7 @@ class Field extends React.Component {
     }
     
     handleChange(event) {
-        const { type, name } = this.props
+        const { type, name, onChange } = this.props
         const eventFormatter = typeof this.eventFormatters[type] === 'function'
             ? this.eventFormatters[type]
             : this.eventFormatters.default   
@@ -109,18 +110,15 @@ class Field extends React.Component {
         try {
             validate(value)
         } catch (e) {
-            value = this.state.value || ''
+            value = this.props.value || ''
         }
 
-        let change = { value }
-
-        this.setState(change)     
-        this.props.onChange({ name, value })
+        onChange({ name, value })
     }
 
     renderEditor() {
-        const { title, type, placeholder, values } = this.props
-        const { value, id } = this.state
+        const { title, type, placeholder, values, value } = this.props
+        const { id } = this.state
 
         const editor = this.getEditor(this.editors, { title, type, placeholder, values, value, id })
         if (!editor)
@@ -143,8 +141,8 @@ class Field extends React.Component {
 
         return (
             <div className="form-group">
-                <label className="col-sm-2 control-label">{title}:</label>
-                <div className="col-sm-10">
+                <div className="col-md-2">{title}:</div>
+                <div className="col-md-6">
                     {value}
                 </div>
             </div>

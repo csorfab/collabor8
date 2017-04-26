@@ -7,8 +7,9 @@ import { fetchOffers, saveOffer } from '../actions'
 class OfferEdit extends React.Component {
     state = {}
     
-    save(offer) {
+    save() {
         const { saveOffer } = this.props
+        const { offer } = this.state
 
         saveOffer(offer, (offer) => {   // callback hack (?)
             if (offer)
@@ -21,7 +22,6 @@ class OfferEdit extends React.Component {
         this.save = this.save.bind(this)
         this.handleChange = this.handleChange.bind(this)
 
-        const { offers, session } = props
         let { offerid, action } = props.match.params        
         let offer = blankOffer()      
         
