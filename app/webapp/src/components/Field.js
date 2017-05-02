@@ -1,7 +1,12 @@
 import React, { Props, PropTypes } from 'react'
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
-require('react-datepicker/dist/react-datepicker.css')
+import Geosuggest from 'react-geosuggest';
+
+
+import 'react-datepicker/dist/react-datepicker.css'
+import 'react-geosuggest/module/geosuggest.css'
+
 
 /*
 
@@ -14,6 +19,7 @@ class Field extends React.Component {
     static propTypes = {
         title: PropTypes.string,
         value: PropTypes.any.isRequired,
+        choices: PropTypes.array,
         name: PropTypes.string.isRequired,
         type: PropTypes.string.isRequired,
         placeholder: PropTypes.string,
@@ -25,30 +31,23 @@ class Field extends React.Component {
     defaultProps = {
         editable: true
     }
-    
+
     constructor(props) {
         super(props)
         this.handleChange = this.handleChange.bind(this)
 
         this.state = {
-            // value: props.value,
-            id: 'Field_' + Math.floor(Math.random()*100000000)
+            id: 'Field_' + Math.floor(Math.random() * 100000000)
         }
-    }
-    
-    componentWillReceiveProps(nextProps) {
-        // this.setState({
-        //     value: nextProps.value
-        // })
     }
 
     validators = {
         number: function (number) {
             if (isNaN(number)) throw 'Invalid number'
-            return number
+            return true
         },
         date: function (date) {
-            return date
+            return true
         },
         default: () => true
     }
@@ -57,105 +56,167 @@ class Field extends React.Component {
         date: (moment) => moment.format('YYYY-MM-DD'),
         textarea: (event) => event.target.value,
         number: (event) => Number(event.target.value),
+        geosuggest: (value) => {
+            const { label, placeId, location } = value
+            return { label, placeId, location }
+        },
+        checkboxes: (event, current) => (
+            {
+                ...current,
+                [event.target.value]: String(event.target.checked)
+            }
+        ),
         default: (event) => event.target.value
     }
 
-    editors = [
+    editorViews = [
         {
             matches: ['text', 'number'],
-            editor: (p) => <input type="text" id={p.id} value={p.value} placeholder={p.placeholder} onChange={this.handleChange} className="form-control" />
+            view: (p) => (
+                <input type="text" id={p.id}
+                    value={p.value}
+                    placeholder={p.placeholder}
+                    onChange={this.handleChange}
+                    className={p.inputClass}
+                />
+            )
         },
         {
             matches: ['textarea'],
-            editor: (p) => <textarea id={p.id} placeholder={p.placeholder} onChange={this.handleChange} className="form-control" value={p.value} />
+            view: (p) => (
+                <textarea id={p.id}
+                    placeholder={p.placeholder}
+                    onChange={this.handleChange}
+                    className={p.inputClass}
+                    value={p.value}
+                />
+            )
         },
         {
             matches: ['date'],
-            editor: (p) => <DatePicker id={p.id} selected={moment(p.value)} onChange={this.handleChange} />
+            view: (p) => (
+                <DatePicker id={p.id}
+                    selected={moment(p.value)}
+                    onChange={this.handleChange}
+                    className={p.inputClass}
+                />)
         },
         {
             matches: ['radio'],
-            editor: (p) => p.values.map((radio) => (
-                        <label className="checkbox-inline" key={p.id + radio.value}>
-                            <input type="radio" name={p.id} value={radio.value} onChange={this.handleChange} checked={radio.value == p.value}/> {radio.label}
-                        </label>
-                    ))
+            view: (p) => p.choices.map((choice) => (
+                <label className="checkbox-inline" key={p.id + choice.value}>
+                    <input type="radio"
+                        name={p.id}
+                        value={choice.value}
+                        onChange={this.handleChange}
+                        checked={choice.value == p.value}
+                    />
+                    {choice.label}
+                </label>
+            ))
+        },
+        {
+            matches: ['geosuggest'],
+            view: (p) => (
+                <Geosuggest id={p.id}
+                    initialValue={p.value ? p.value.label : ''}
+                    inputClassName={p.inputClass}
+                    onSuggestSelect={this.handleChange}
+                />)
+        },
+        {
+            matches: ['checkboxes'],
+            view: (p) => p.choices.map((choice) => (
+                <label className="checkbox-inline">
+                    <input type="checkbox"
+                        value={choice.value}
+                        onChange={this.handleChange}
+                        checked={p.value[choice.value] == 'true'}
+                    />
+                    {choice.label}
+                </label>
+            ))
         }
     ]
 
-    getEditor(editors, props) {
-        return editors.reduce(
+    views = [
+        {
+            matches: ['text', 'number', 'date'],
+            view: (p) => <input id={p.id} type="text" style={{ ...p.style, border: '0' }} readOnly={true} value={p.value} />
+        },
+        {
+            matches: ['geosuggest'],
+            view: (p) => <input id={p.id} type="text" style={{ ...p.style, border: '0' }} readOnly={true} value={(p.value) ? p.value.location.lat : ''} />
+        },
+        {
+            matches: ['textarea'],
+            //view: (p) => <textarea id={p.id} style={{border: '0', resize: 'none'}} readOnly={true} value={p.value} res/>
+            view: (p) => <pre id={p.id}>{p.value}</pre>
+        },
+        {
+            matches: ['radio'],
+            view: (p) => <input id={p.id} type="text" style={{ border: '0' }} readOnly={true} value={
+                p.choices.reduce((prev, curr) => curr.value == p.value ? curr.label : prev, 'N/A')
+            } />
+        },
+        {
+            matches: ['checkboxes'],
+            view: (p) => p.value ? p.choices.filter((choice) => p.value[choice.value] == 'true').map((choice) => choice.label).join(', ') : ' '
+        }
+    ]
+
+    getView(views, props) {
+        return views.reduce(
             (p, c) => c.matches.reduce(
                 (p, c) => c === props.type ? true : p,
                 false
-            ) ? c.editor : p,
+            ) ? c.view : p,
             false
         )(props)
     }
-    
+
     handleChange(event) {
         const { type, name, onChange } = this.props
         const eventFormatter = typeof this.eventFormatters[type] === 'function'
             ? this.eventFormatters[type]
-            : this.eventFormatters.default   
-        
+            : this.eventFormatters.default
+
         const validate = typeof this.props.validator === 'function'
             ? this.props.validator
             : typeof this.validators[type] === 'function'
                 ? this.validators[type]
                 : this.validators.default
-        
-        let value = eventFormatter(event)
-        
+
+        let value = eventFormatter(event, this.props.value)
+
         try {
             validate(value)
         } catch (e) {
-            value = this.props.value || ''
+            return false
         }
 
         onChange({ name, value })
     }
 
-    renderEditor() {
-        const { title, type, placeholder, values, value } = this.props
-        const { id } = this.state
+    render() {
+        const props = { ...this.props, id: this.state.id }
+        const editable = typeof this.props.editable === 'undefined' ? true : this.props.editable
+        const views = editable ? this.editorViews : this.views
 
-        const editor = this.getEditor(this.editors, { title, type, placeholder, values, value, id })
-        if (!editor)
-            throw '[Field] Invalid type. Check props.'
-        
+        const view = this.getView(views, props)
+        if (view === false)
+            throw '[Field] Invalid type \''+ props.type +'\'. Check props.'
+
         return (
             <div className="form-group">
-                <label htmlFor={id} className="col-sm-4 control-label">
-                    {title}
+                <label htmlFor={props.id} className={props.labelClass} style={{ fontWeight: 'bold' }}>
+                    {props.title}
                 </label>
-                <div className="col-sm-8">
-                    {editor}
-                </div>   
-            </div>
-        )
-    }
-
-    renderView() {
-        const { title, value } = this.props
-
-        return (
-            <div className="form-group">
-                <div className="col-md-2">{title}:</div>
-                <div className="col-md-6">
-                    {value}
+                <div className={props.controlClass}>
+                    {view}
                 </div>
             </div>
         )
-    }
-    
-    render() {
-        const editable = typeof this.props.editable === 'undefined' ? true : this.props.editable
-
-        if (editable)
-            return this.renderEditor()
-        else
-            return this.renderView()
     }
 }
 

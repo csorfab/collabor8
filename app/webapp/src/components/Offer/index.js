@@ -1,17 +1,21 @@
 import Offer from './Offer';
 
-export const blankOffer = () => ({
+export const blankOffer = (session = {user: {}}) => ({
     id: -1,
     numberOfParticipants: '',
     description: '',
     availabilityFrom: "2017-03-02",
     availabilityTill: "2018-03-02",
-    locationString: "Budapest, Hungary",
-    languages: "Hungarian (native), Englsh",
-    online: 1,
-   // lab: 0,
-    //field: 0,
-    type: 'pay'
+    location: {
+        label: ""
+    },
+    languageNative: '',
+    languageSecond: '',
+    testMethods: {},
+    devices: {},
+    payment: '',
+    user_id: session.user.id,
+    user: session.user
 })
 
 export default Offer;

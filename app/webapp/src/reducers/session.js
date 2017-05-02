@@ -6,7 +6,8 @@ export const session = (state = {
         authToken: ''
     },
     isFetching: false,
-    actionQueue: []
+    actionQueue: [],
+    redirURL: ''
 }, action) => {
     switch(action.type){
         case 'RECEIVE_SESSION':
@@ -34,6 +35,11 @@ export const session = (state = {
             return {
                 ...state,
                 actionQueue: state.actionQueue.filter((v, i) => i !== 0)
+            }    
+        case 'SET_REDIR_URL':
+            return {
+                ...state,
+                redirURL: action.url
             }    
         default:
             return state

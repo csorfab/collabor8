@@ -19,17 +19,16 @@ class CreateOffersTable extends Migration
             $table->integer('numberOfParticipants');
             $table->date('availabilityFrom');
             $table->date('availabilityTill');
-            $table->string('locationString');
-            $table->string('languages');
-            $table->boolean('online');
-            $table->boolean('lab');
-            $table->boolean('field');
-            $table->enum('type', ['pay', 'collab']);
+            $table->json('location');
+            $table->string('testMethods')->nullable();
+            $table->string('devices')->nullable();
+            $table->string('payment');
+            $table->string('languageNative');
+            $table->string('languageSecond')->nullable();
+            $table->string('additional')->nullable();
             $table->integer('user_id');
             $table->timestamps();
         });
-
-        DB::statement('ALTER TABLE offers ADD locationPoint POINT' );
     }
 
     /**

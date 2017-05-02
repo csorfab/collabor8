@@ -1,17 +1,33 @@
 import React, { PropTypes } from 'react'
 import { Link } from 'react-router-dom'
+import Field from '../Field'
+import Form from '../Form'
 import styles from './User.css';
 
 class User extends React.Component {
   static propTypes = {
     user: PropTypes.object,
-    view: PropTypes.oneOf(['small', 'medium'])
+    view: PropTypes.oneOf(['small', 'medium']),
+    editable: PropTypes.bool
+  }
+
+  renderFull() {
+    const { user } = this.props
+
+    return (
+      <Form>
+        <Field name="name" value={user.name}
+          title="Full name"
+        />
+          
+      </Form>
+    )
   }
   
   render = () => {
     let { user } = this.props
 
-    if (!user) user = { name: 'Unknown User' }
+    if (!user || !user.name) user = { name: 'Unknown User' }
     
 
     const UserLink = () => (<Link to={'/user/' + user.id}>{user.name}</Link>)

@@ -21,8 +21,8 @@ export class GoogleOAuth2Manager {
     window.jQuery.getScript('https://apis.google.com/js/platform.js?onload=googleInit')
 
     registerAction((action) => this.dispatch(action));
-  }
-
+  }  
+  
   signedInListener() {
     const { auth2, statusChanged } = this
 
@@ -42,9 +42,11 @@ export class GoogleOAuth2Manager {
   dispatch(action){
     switch(action.type){
       case 'SIGN_IN':
-        return this.auth2.signIn();
+        this.auth2.signIn()
+        break
       case 'SIGN_OUT':
-        return this.auth2.signOut();
+        this.auth2.signOut()
+        break
       default:
         break
     }

@@ -2,8 +2,18 @@ import React from 'react'
 import { connect } from 'react-redux'
 import OffersContainer from './OffersContainer/index'
 import { Link } from 'react-router-dom'
+import Field from '../components/Field'
 
 class Index extends React.Component {
+    constructor(props) {
+        super(props)
+        this.handleChange = this.handleChange.bind(this)
+    }
+
+    handleChange(event) {
+        
+    }
+
     render() {
         const { offers } = this.props
         
@@ -11,8 +21,19 @@ class Index extends React.Component {
             <div>
                 <div className="jumbotron">
                     <div className="container">
-                        <h1>Hello, world!</h1>
-                        <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
+                        <h1>Access or share behavioral testing resources by collaborating with other researchers around the world.</h1>
+                        <div className="landingMainFilter">
+                            <p>I'm looking for test participants</p>
+                            <p>
+                                Who are located near
+                                <Field type="geosuggest"
+                                    name="location"
+                                    onChange={this.handleChange}
+                                    inputClass="form-control landingMainLocation"
+                                    editable={true}
+                                />    
+                            </p>
+                        </div>
                         <p><Link className="btn btn-primary btn-lg" to="/" role="button">Learn more &raquo;</Link></p>
                     </div>
                 </div>

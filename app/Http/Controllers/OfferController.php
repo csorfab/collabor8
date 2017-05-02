@@ -31,6 +31,9 @@ class OfferController extends Controller
         $user = Auth::user();
     	$newOffer = request()->input('offer');
 
+		if(!isset($newOffer['id']))
+			return $this->new();
+
     	$offer = Offer::find($newOffer['id']);
 
     	if(!$offer){

@@ -4,7 +4,7 @@ import SessionManager from './containers/SessionManager'
 
 const GOOGLE_CLIENT_ID = '585712562710-cfb4erbilkj3pn7u1uo45ct78u5i7s4a.apps.googleusercontent.com'
 
-export function Auth(props) {
+export function Authenticate(props) {
     const managersDescriptor = {
         google: {
             Class: GoogleOAuth2Manager,
@@ -17,4 +17,4 @@ export function Auth(props) {
     )
 }
 
-export default Auth
+export default Authenticate

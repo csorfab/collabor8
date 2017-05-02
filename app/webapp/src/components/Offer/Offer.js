@@ -43,12 +43,13 @@ class Offer extends React.Component {
       description,
       availabilityFrom,
       availabilityTill,
-      locationString,
-      languages,
-      online,
-      lab,
-      field,
-      type,
+      location,
+      languageNative,
+      languageSecond,
+      devices,
+      testMethods,
+      payment,
+      additional,
       user
     } = offer
 
@@ -58,64 +59,88 @@ class Offer extends React.Component {
     let radioYesNo = [{ label: 'Yes', value: 1 }, { label: 'No', value: 0 }]
 
     return (
-      <div className="row">
-        <div className="col-md-8">
-          <span>
-            <button className="btn btn-default" onClick={onCancel}>Cancel</button>
-            <button className="btn btn-default" onClick={onSave}>Save</button>
-            <Link className="btn btn-default" to={"/offer/edit/" + id}>Edit</Link>
-          </span>
-          <Form className="form-horizontal"
-            childrenProps={{
-              onChange,
-              editable: editing
-            }}>
-            <Field name="numberOfParticipants" value={numberOfParticipants}
-              type="number"
-              title="Size of subject pool"
-              placeholder="Enter number of subjects you can offer for testing"
-            />
-            <Field name="description" value={description}
-              type="textarea" 
-              title="Description of subject population"
-              placeholder="Give a description of the subject population (age, gender distribution, background etc.)"
-            />
-            <Field name="locationString" value={locationString}
-              type="text"
-              title="Location of subjects"
-              placeholder="Start typing to search for locations"
-            />
-            <Field name="online" value={online}
-              type="radio"
-              values={radioYesNo}
-              title="Are subjects available for online (remote) testing?"
-            />
-            <Field name="lab" value={lab}
-              type="radio"
-              values={radioYesNo}
-              title="Are subjects available for lab testing?"
-            />
-            <Field name="field" value={field}
-              type="radio"
-              values={radioYesNo}
-              title="Are subjects available for field testing?"
-            />
-
-            <Field name="availabilityFrom" value={availabilityFrom}
-              type="date"
-              title="Subjects are available from"
-            />
-            <Field name="availabilityTill" value={availabilityTill}
-              type="date"
-              title="Subjects are available until"
-            />
-          </Form>
+      <div>
+        <div className="row">
+          <div className="col-md-9">
+            <Form className="form-horizontal"
+              childrenProps={{
+                onChange,
+                editable: editing,
+                labelClass: 'col-sm-offset-1 col-sm-3',
+                controlClass: 'col-sm-8',
+                inputClass: 'form-control'
+              }}>
+              <Field name="numberOfParticipants" value={numberOfParticipants}
+                type="number"
+                title="Size of subject pool"
+                placeholder="Enter number of subjects you can offer for testing"
+              />
+              <Field name="description" value={description}
+                type="textarea"
+                title="Description of subject population"
+                placeholder="Give a description of the subject population (age, gender distribution, background etc.)"
+              />
+              <Field name="location" value={location}
+                type="geosuggest"
+                title="Location of subjects"
+                placeholder="Start typing to search for locations"
+              />
+              <Field name="testMethods" value={testMethods}
+                type="checkboxes"
+                title="Available testing methods"
+                choices={[
+                  { label: 'Online (remote) testing', value: 'online' },
+                  { label: 'Lab testing', value: 'lab' },
+                  { label: 'Field testing', value: 'field' }
+                ]}
+              />
+              <Field name="availabilityFrom" value={availabilityFrom}
+                type="date"
+                title="Subjects are available from"
+              />
+              <Field name="availabilityTill" value={availabilityTill}
+                type="date"
+                title="Subjects are available until"
+              />
+              <Field name="languageNative" value={languageNative}
+                type="text"
+                title="Native language of subjects"
+              />
+              <Field name="languageSecond" value={languageSecond}
+                type="text"
+                title="Second language subjects speak"
+              />
+              <Field name="payment" value={payment}
+                type="textarea"
+                title="Payment of subjects"
+                placeholder="Describe how do you compensate subject participating in the tests (payment, course credits, etc)."
+              />
+              <Field name="devices" value={devices}
+                type="checkboxes"
+                title="Available devices"
+                choices={[
+                  { label: 'EEG', value: 'eeg' },
+                  { label: 'fMRI', value: 'fmri' },
+                  { label: 'Eyetracking', value: 'eye' }
+                ]}
+              />
+              <Field name="additional" value={additional}
+                type="textarea"
+                title="Additional clarification of available experimental setting"
+                placeholder="Please provide any clarification/additional description of the offered experimental setting that you find necessary for requestors to know."
+              />
+            </Form>
+          </div>
+          <div className="col-md-3">
+            <p>Offered by:</p>
+            <User user={user} view="small" />
+            <Organization name={org.name} uniname={org.uniname} location={org.location} image={org.image} />
+          </div>
         </div>
-        <div className="col-md-4">
-          <p>Offered by:</p>
-          <User user={user} view="small" />
-          <Organization name={org.name} uniname={org.uniname} location={org.location} image={org.image} />
-          <p>Collaboration type: {type}</p>
+        <div className="row">
+          <button className="btn btn-default" onClick={onCancel}>Cancel</button>
+          <button className="btn btn-default" onClick={onSave}>Save</button>
+          <Link className="btn btn-default" to={"/offer/edit/" + id}>Edit</Link>
         </div>
       </div>
     )

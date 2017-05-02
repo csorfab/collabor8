@@ -3,14 +3,17 @@ import { connect } from 'react-redux'
 import { BrowserRouter as Router } from 'react-router-dom';
 import SessionView from './components/SessionView'
 import NavBar from './containers/Nav'
-import Auth from './Auth'
+import Authenticate from './Authenticate'
 import Routes from './Routes'
+import './css/bootstrap.css'
+import './css/bootstrap-theme.css'
+import './css/index.css'
 
 class App extends React.Component {
     render() {
         return (
             <div>
-                <Auth />
+                <Authenticate />
                 <Router>
                     <div>
                         <NavBar>

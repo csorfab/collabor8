@@ -9,8 +9,9 @@ class Offer extends Model
     protected $fillable = [
         'description', 'numberOfParticipants',
         'availabilityFrom', 'availabilityTill',
-        'locationString', 'languages',
-        'online', 'lab', 'field', 'type'
+        'location', 'devices',
+        'testMethods', 'payment', 'languageNative',
+        'languageSecond', 'additional'
     ];
 
     protected $appends = [
@@ -19,6 +20,12 @@ class Offer extends Model
 
     protected $hidden = [
 
+    ];
+
+    protected $casts = [
+        'location' => 'array',
+        'devices' => 'array',
+        'testMethods' => 'array'
     ];
 
     public function user(){
