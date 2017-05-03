@@ -17,14 +17,12 @@ function Login() {
 export function Routes() {
     return (
         <Switch>
-            <Route path="/login" component={Login} />
-            <Route path="/user/:userid" component={UserEdit} />
-            <Route path="/offer/view/:offerid" component={OfferView} />
-            {/*<Route component={Authorize}>*/}
-                <Route path="/offer/edit/:offerid" component={OfferEdit} />
-                <Route path="/offer/new" component={OfferEdit} />
-            {/*</Route>    */}
-            <Route path="/" component={Index} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/user/:userid" component={UserEdit} />
+            <Route exact path="/offer/view/:offerid" component={OfferView} />
+            <Authorize path="/offer/edit/:offerid" component={OfferEdit} />
+            <Authorize path="/offer/new" component={OfferEdit} />
+            <Route component={Index} />
         </Switch>
     )
 }

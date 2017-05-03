@@ -24,16 +24,14 @@ class OfferEdit extends React.Component {
         this.save = this.save.bind(this)
         this.handleChange = this.handleChange.bind(this)
 
+        this.state = this.receiveOfferid(props)
+    }
+
+    receiveOfferid(props) {
         const offerid = props.match.params.offerid || -1
-        const offer = props.offer || blankOffer(props.session)     
-
-        console.log(offer)
-
-
-        this.state = {
-            offer,
-            offerid
-        }
+        const offer = props.offer || blankOffer(props.session)   
+        
+        return {offer, offerid}
     }
 
     handleChange(event) {
@@ -54,11 +52,15 @@ class OfferEdit extends React.Component {
     componentWillReceiveProps(props) {
         const { offer, session } = props
 
+        if (props.match.params.offerid !== this.state.offerid) {
+            this.setState(this.receiveOfferid(props))
+        }        
+        
         if (offer && (offer.id !== this.state.offer.id)) {
             this.setState({ offer })
         }
 
-        if (session.signedIn && this.state.offer.user_id !== session.user.id) {
+        if (session.signedIn && this.state.offerid == -1) {
             this.setState({
                 offer: {
                     ...this.state.offer,
@@ -71,7 +73,7 @@ class OfferEdit extends React.Component {
 
     render() {
         const { session } = this.props
-        const { offer } = this.state
+        const { offer, offerid } = this.state
         
         const canEdit = session.signedIn && offer.user_id === session.user.id
 
@@ -79,6 +81,7 @@ class OfferEdit extends React.Component {
             <div>
                 <div className="jumbotron">
                     <div className="container">
+                        <h1>{offerid == -1 ? 'Post a new resource offer' : 'Edit your resource offer'}</h1>
                         <Offer offer={offer} view="full" editing={true} onSave={this.save} onChange={this.handleChange} />
                     </div>
                 </div> 

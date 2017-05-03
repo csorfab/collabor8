@@ -7,7 +7,7 @@ class NavBar extends React.Component {
             <nav className="navbar navbar-inverse navbar-fixed-top">
                 <div className="container">
                     <div className="navbar-header">
-                        <button type="button" 
+                        <button type="button"
                             className="navbar-toggle collapsed"
                             data-toggle="collapse"
                             data-target="#navbar"
@@ -21,7 +21,13 @@ class NavBar extends React.Component {
                         <Link className="navbar-brand" to="/">collabor8</Link>
                     </div>
                     <div id="navbar" className="navbar-collapse collapse">
+                        <ul className="nav navbar-nav">
+
+                        </ul>
                         <ul className="nav navbar-nav navbar-right">
+                            <li>
+                                <Link to="/offer/new">Post resource offer</Link>
+                            </li>
                             {this.props.children}
                         </ul>
                     </div>

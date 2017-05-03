@@ -22,10 +22,11 @@ class Index extends React.Component {
                 <div className="jumbotron">
                     <div className="container">
                         <h1>Access or share behavioral testing resources by collaborating with other researchers around the world.</h1>
-                        <div className="landingMainFilter">
+                        <div className="landingMainFilter col-md-9 col-md-offset-2">
                             <p>I'm looking for test participants</p>
                             <p>
-                                Who are located near
+                                located near
+                                <input type="date" />
                                 <Field type="geosuggest"
                                     name="location"
                                     onChange={this.handleChange}

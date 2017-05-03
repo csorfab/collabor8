@@ -12,67 +12,48 @@ class OffersContainer extends React.Component {
 
   constructor(props) {
     super(props)
-    // this.changeHandler = this.changeHandler.bind(this)
-    // this.saveNewOffer = this.saveNewOffer.bind(this)
-    // this.cancelNewOffer = this.cancelNewOffer.bind(this)
-  }
 
-  state = { creating: false }
+  }
 
   componentDidMount() {
     this.props.fetchOffers()
   }
 
 
-  cancelNewOffer() {
-    const { setCreating } = this.props
-    setCreating(false)
-  }
-
-  saveOffer(newOffer) {
-    // TODO
-  }
-
   render = () => {
-    let { offers, session, isFetching, isCreating, filter, creatingItem } = this.props
-    const { createNewOffer, saveNewOffer, cancelNewOffer, changeHandler } = this    
+    let { offers, session, isFetching, filter } = this.props
 
     if (!filter)
-      filter = () => true  
-    
+      filter = () => true
+
     return (
       <div>
-        <div className="offerEditor">
-          {
-            session.signedIn ? 
-              isCreating ? 
-                <Offer offer={creatingItem} onChange={saveNewOffer}  onCancel={cancelNewOffer} editing={true} />
-              :
-                <Link to="/offer/new" className="btn btn-default">New offer</Link>
-            :
-            <span>Not logged in</span>
-          }
-        </div>  
-        
-        <FetchingIcon isFetching={isFetching} color="white" />
-        {offers.filter(filter).map((offer) => <Offer offer={offer} key={'OFFER_' + offer.id} onChange={this.changeHandler} editing={false} />)}
+        <div className="col-md-offset-2 col-md-9">
+          <FetchingIcon isFetching={isFetching} color="white" />
+          {offers.filter(filter).map((offer) => <Offer offer={offer} key={'OFFER_' + offer.id} onChange={this.changeHandler} view="item" />)}
+        </div>
+        <div>
+          <div className="col-md-1">
+
+          </div>
+        </div>
       </div>
-    )
+        )
   }
 }
 
 const mapStateToProps = state => ({
-  offers: state.offers.items,
+          offers: state.offers.items,
   isFetching: state.offers.isFetching,
   authInfo: state.session.authInfo,
   session: state.session
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchOffers: () => {
-    dispatch(fetchOffers())
-  }
-});
+          fetchOffers: () => {
+          dispatch(fetchOffers())
+        }
+        });
 
 export default connect(
   mapStateToProps,

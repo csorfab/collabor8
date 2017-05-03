@@ -47,3 +47,56 @@ nav {
 .geosuggest__suggests--hidden {
   visibility: hidden;
 }
+
+.offerItem {
+  background-color: #ECF3FF;
+  padding: 30px 20px 30px 20px;
+  margin: 10px;
+  margin-bottom: 40px;
+  border-radius: 10px;
+}
+
+.offerItem h3 {
+  margin-top: 0px;
+  margin-bottom: 20px;
+}
+
+.offerItem .form-group {
+  margin-bottom: 0px;
+}
+
+.offerItem p {
+  margin-bottom: 20px;
+}
+
+.offerLabel {
+  font-family: 'Helvetica Neue', Helvetica, sans-serif;
+  font-weight: bold;
+}
+
+.offerLabel.bigger {
+  font-size: 16px;
+  font-weight: normal;
+}
+
+.nav {
+  font-family: 'Helvetica Neue', Helvetica, sans-serif;
+}
+
+.offerIcon {
+  margin-right: 15px;
+}
+
+.valign-relative {
+  position: relative;
+}
+
+.valign-absolute-middle {
+  position: absolute;
+  right: 0;
+  top: calc(50% - 14px)
+}
+
+.offerEditPanel {
+  margin-top: 20px;
+}

@@ -20,11 +20,11 @@ class Field extends React.Component {
         title: PropTypes.string,
         value: PropTypes.any.isRequired,
         choices: PropTypes.array,
-        name: PropTypes.string.isRequired,
+        name: PropTypes.string,
         type: PropTypes.string.isRequired,
         placeholder: PropTypes.string,
         validator: PropTypes.func,
-        onChange: PropTypes.func.isRequired,
+        onChange: PropTypes.func,
         editable: PropTypes.bool
     }
 
@@ -122,6 +122,7 @@ class Field extends React.Component {
                     initialValue={p.value ? p.value.label : ''}
                     inputClassName={p.inputClass}
                     onSuggestSelect={this.handleChange}
+                    queryDelay={500}
                 />)
         },
         {
@@ -142,7 +143,8 @@ class Field extends React.Component {
     views = [
         {
             matches: ['text', 'number', 'date'],
-            view: (p) => <input id={p.id} type="text" style={{ ...p.style, border: '0' }} readOnly={true} value={p.value} />
+            // view: (p) => <input id={p.id} type="text" style={{ ...p.style, border: '0' }} readOnly={true} value={p.value} />
+            view: (p) => p.value
         },
         {
             matches: ['geosuggest'],
@@ -200,19 +202,24 @@ class Field extends React.Component {
 
     render() {
         const props = { ...this.props, id: this.state.id }
-        const editable = typeof this.props.editable === 'undefined' ? true : this.props.editable
+        const { id, type, labelClass, title, controlClass, blockClass, viewOnly } = props
+
+        const editable = typeof props.editable === 'undefined' ? true : props.editable
         const views = editable ? this.editorViews : this.views
 
         const view = this.getView(views, props)
         if (view === false)
-            throw '[Field] Invalid type \''+ props.type +'\'. Check props.'
+            throw '[Field] Invalid type \''+ type +'\'.'
 
+        if (viewOnly)
+            return view    
+        
         return (
-            <div className="form-group">
-                <label htmlFor={props.id} className={props.labelClass} style={{ fontWeight: 'bold' }}>
-                    {props.title}
+            <div className={blockClass}>
+                <label htmlFor={id} className={labelClass}>
+                    {title}
                 </label>
-                <div className={props.controlClass}>
+                <div className={controlClass}>
                     {view}
                 </div>
             </div>

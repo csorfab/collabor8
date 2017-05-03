@@ -15,7 +15,7 @@ class CreateOffersTable extends Migration
     {
         Schema::create('offers', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('description');
+            $table->text('description');
             $table->integer('numberOfParticipants');
             $table->date('availabilityFrom');
             $table->date('availabilityTill');

@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom'
 import Organization from '../Organization/index'
 import Field from '../Field'
 import Form from '../Form'
+import { Truncate } from '../Misc'
+import collabImage from '../../images/collab.png'
 
 class Offer extends React.Component {
   static propTypes = {
@@ -25,15 +27,80 @@ class Offer extends React.Component {
     this.props.onChange(event)
   }
 
+  renderItemView() {
+    const { offer } = this.props
+
+    const {
+      id,
+      numberOfParticipants,
+      description,
+      availabilityFrom,
+      availabilityTill,
+      location,
+      languageNative,
+      languageSecond,
+      devices,
+      testMethods,
+      payment,
+      additional,
+      user
+    } = offer
+
+    return (
+      <div className="row offerItem">
+          <div className="col-sm-8">
+          <h3><img src={collabImage} className="offerIcon" width={48} height={48} style={{ float: 'left' }} /><Link to={"/offer/view/" + id}>{numberOfParticipants} participants available for experiments</Link></h3>
+            <p><Truncate maxWords={20}>{description}</Truncate></p>
+            <Form className="form-horizontal"
+              childrenProps={{
+              editable: false,
+              blockClass: 'form-group valign-relative',
+                labelClass: 'col-sm-4 offerLabel',
+                controlClass: 'col-sm-8 valign-absolute-middle'
+              }}>
+              <Field name="numberOfParticipants" value={numberOfParticipants}
+                type="number"
+                title="Number of participants"
+              />
+              <Field name="availability" value={availabilityFrom + ' - ' + availabilityTill}
+                type="text"
+                title="Availability period"
+              />
+              <Field name="location" value={location.label}
+                type="text"
+                title="Location"
+              />
+              <Field name="languages" value={languageNative + ' (native)' + (languageSecond ? ', ' + languageSecond : '')}
+                type="text"
+                title="Languages"
+              /> 
+            </Form>
+          </div>
+          <div className="col-sm-4">
+            <p className="offerLabel bigger">Offered by:</p>
+            <User user={user} view="small" />
+            <div className="offerEditPanel">
+              <Link className="btn btn-default" to={"/offer/edit/" + id}>Edit</Link>
+            </div>
+          </div>
+      </div>
+
+    )
+  }
+
   renderFullView() {
 
   }
 
   render() {
     const editing = typeof this.props.editing === 'undefined' ? false : this.props.editing
-    const { onCancel } = this.props
-    const { offer } = this.props
+    const { offer, onCancel } = this.props
     const onChange = this.handleChange
+
+    const view = this.props.view || 'full'
+
+    if (view === 'item')
+      return this.renderItemView()
 
     const onSave = () => this.props.onSave()
 
@@ -66,7 +133,8 @@ class Offer extends React.Component {
               childrenProps={{
                 onChange,
                 editable: editing,
-                labelClass: 'col-sm-offset-1 col-sm-3',
+                labelClass: 'col-sm-offset-1 col-sm-3 offerLabel',
+                blockClass: 'form-group',
                 controlClass: 'col-sm-8',
                 inputClass: 'form-control'
               }}>
