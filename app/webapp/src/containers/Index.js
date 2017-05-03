@@ -26,7 +26,6 @@ class Index extends React.Component {
                             <p>I'm looking for test participants</p>
                             <p>
                                 located near
-                                <input type="date" />
                                 <Field type="geosuggest"
                                     name="location"
                                     onChange={this.handleChange}
