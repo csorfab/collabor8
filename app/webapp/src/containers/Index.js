@@ -13,7 +13,7 @@ class Index extends React.Component {
     handleChange(event) {
         const { name, value } = event
         
-        
+
     }
 
     render() {
@@ -35,8 +35,9 @@ class Index extends React.Component {
                                     editable={true}
                                 />    
                             </p>
+                             <p><button className="btn btn-primary btn-lg" role="button">Learn more &raquo;</button></p>
                         </div>
-                        <p><Link className="btn btn-primary btn-lg" to="/" role="button">Learn more &raquo;</Link></p>
+                       
                     </div>
                 </div>
 
