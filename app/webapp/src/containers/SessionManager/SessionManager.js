@@ -27,7 +27,7 @@ class SessionManager extends React.Component {
     const manager = {
       ...managerDescriptor,
       instance: new Class(
-        (action) => this.dispatch({...action, method}),
+        (action) => this.dispatch({ ...action, method }),
         params
       ),
       signedIn: false
@@ -36,32 +36,6 @@ class SessionManager extends React.Component {
     this.managers[method] = {
       ...this.managers[method],
       ...manager
-    }
-  }
-
-  registerCallback(method, callback) {
-    this.managers[method].callback = callback
-  }
-
-  executeCallback(method, action) {
-    this.managers[method].callback(action)
-  }
-
-  managerSignedOut(method) {
-    const { deleteSession } = this.props
-
-    this.managers[method].signedIn = false
-    deleteSession()
-  }
-
-  managerSignedIn(method, authToken) {
-    const { session, authenticate } = this.props
-
-    this.managers[method].signedIn = true
-    this.managers[method].authToken = authToken
-
-    if (!session.signedIn) {
-      authenticate(method, authToken)
     }
   }
 
@@ -83,6 +57,32 @@ class SessionManager extends React.Component {
         this.registerCallback(action.method, action.callback)
         break;
     }
+  }
+
+  registerCallback(method, callback) {
+    this.managers[method].callback = callback
+  }
+
+  executeCallback(method, action) {
+    this.managers[method].callback(action)
+  }
+
+  managerSignedIn(method, authToken) {
+    const { session, authenticate } = this.props
+
+    this.managers[method].signedIn = true
+    this.managers[method].authToken = authToken
+
+    if (!session.signedIn) {
+      authenticate(method, authToken)
+    }
+  }
+
+  managerSignedOut(method) {
+    const { deleteSession } = this.props
+
+    this.managers[method].signedIn = false
+    deleteSession()
   }
 
   signIn(method) {
