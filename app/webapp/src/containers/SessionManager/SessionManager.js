@@ -27,8 +27,7 @@ class SessionManager extends React.Component {
     const manager = {
       ...managerDescriptor,
       instance: new Class(
-        (authToken) => this.statusChanged(method, authToken),
-        (callback) => this.registerCallback(method, callback),
+        (action) => this.dispatch({...action, method}),
         params
       ),
       signedIn: false
@@ -66,14 +65,6 @@ class SessionManager extends React.Component {
     }
   }
 
-  statusChanged(method, authToken) {
-    if (!authToken) {
-      return this.managerSignedOut(method)
-    }
-
-    this.managerSignedIn(method, authToken)
-  }
-
   dispatch(action) {
     switch (action.type) {
       case 'SIGN_IN':
@@ -81,6 +72,15 @@ class SessionManager extends React.Component {
         break;
       case 'SIGN_OUT':
         this.signOut()
+        break;
+      case 'MANAGER_SIGNED_IN':
+        this.managerSignedIn(action.method, action.authToken)
+        break;
+      case 'MANAGER_SIGNED_OUT':
+        this.managerSignedOut(action.method)
+        break;
+      case 'MANAGER_REGISTER_CALLBACK':
+        this.registerCallback(action.method, action.callback)
         break;
     }
   }
