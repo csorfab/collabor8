@@ -7,25 +7,37 @@ class SessionManager extends React.Component {
 
   }
 
-  callbacks = {}
   managers = {}
-  
-  componentWillReceiveProps(props) {
-    const queue = props.session.actionQueue
-    
-    if (queue.length > 0) {
-      const nextAction = queue[0]
-      this.executeCallback(nextAction.method, nextAction)
-      this.props.queuePop()
+
+  constructor(props) {
+    super(props)
+
+    let { managersDescriptor } = this.props
+
+    for (let method in managersDescriptor) {
+      this.registerManager(method, managersDescriptor[method])
     }
   }
 
-  statusChanged(method, authToken) {
-    const { authenticate, deleteSession } = this.props
+  registerManager(method, managerDescriptor) {
+    let { Class, params } = managerDescriptor
 
-    if (!authToken) return deleteSession()
+    this.managers[method] = {}      // this is needed because registerCallback expects the object to exist
 
-    authenticate(method, authToken)
+    const manager = {
+      ...managerDescriptor,
+      instance: new Class(
+        (authToken) => this.statusChanged(method, authToken),
+        (callback) => this.registerCallback(method, callback),
+        params
+      ),
+      signedIn: false
+    }
+
+    this.managers[method] = {
+      ...this.managers[method],
+      ...manager
+    }
   }
 
   registerCallback(method, callback) {
@@ -36,38 +48,80 @@ class SessionManager extends React.Component {
     this.managers[method].callback(action)
   }
 
-  registerManager(method, managerDescriptor) {
-    let { Class, params } = managerDescriptor
+  managerSignedOut(method) {
+    const { deleteSession } = this.props
 
-    this.managers[method] = managerDescriptor
-    this.managers[method].instance = new Class(
-      (authToken) => this.statusChanged(method, authToken),
-      (callback) => this.registerCallback(method, callback),
-      params
-    )
+    this.managers[method].signedIn = false
+    deleteSession()
   }
 
-  componentDidMount() {
-    let { managersDescriptor } = this.props
+  managerSignedIn(method, authToken) {
+    const { session, authenticate } = this.props
 
-    for (let method in managersDescriptor) {
-      this.registerManager(method, managersDescriptor[method])
+    console.log('BASZ', this, method, 'VBASZ')
+
+    this.managers[method].signedIn = true
+    this.managers[method].authToken = authToken
+
+    if (!session.signedIn) {
+      authenticate(method, authToken)
+    }
+  }
+
+  statusChanged(method, authToken) {
+    if (!authToken) {
+      return this.managerSignedOut(method)
+    }
+
+    this.managerSignedIn(method, authToken)
+  }
+
+  dispatch(action) {
+    switch (action.type) {
+      case 'SIGN_IN':
+        this.signIn(action.method)
+        break;
+      case 'SIGN_OUT':
+        this.signOut()
+        break;
     }
   }
 
   signIn(method) {
-    this.executeCallback(method, { type: 'SIGN_IN' })
+    if (this.props.session.signedIn || this.props.session.isFetching) return
+
+    if (!this.managers[method].signedIn)
+      this.executeCallback(method, { type: 'SIGN_IN' })
+    else
+      this.props.authenticate(method, this.managers[method].authToken)
   }
 
   signOut() {
-    const { method } = this.props.session.authInfo
-    this.executeCallback(method, { type: 'SIGN_OUT' })
+    const { session } = this.props
+    const { method } = session.authInfo
+
+    if (session.signedIn)
+      this.executeCallback(method, { type: 'SIGN_OUT' })
+  }
+
+  advanceQueue(props) {
+    const queue = props.session.actionQueue
+
+    if (queue.length > 0) {
+      const nextAction = queue[0]
+
+      this.dispatch(nextAction)
+      this.props.queuePop()
+    }
+  }
+
+  componentWillReceiveProps(props) {
+    this.advanceQueue(props)
   }
 
   render() {
     return null
   }
-
 }
 
 function mapStateToProps(state) {

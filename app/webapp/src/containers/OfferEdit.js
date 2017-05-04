@@ -77,6 +77,9 @@ class OfferEdit extends React.Component {
         
         const canEdit = session.signedIn && offer.user_id === session.user.id
 
+        if (!canEdit)
+            return 'permission denied'    
+        
         return (           
             <div>
                 <div className="jumbotron">

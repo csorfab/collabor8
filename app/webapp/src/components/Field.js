@@ -132,7 +132,7 @@ class Field extends React.Component {
                     <input type="checkbox"
                         value={choice.value}
                         onChange={this.handleChange}
-                        checked={p.value[choice.value] == 'true'}
+                        checked={p.value[choice.value] === 'true'}
                     />
                     {choice.label}
                 </label>

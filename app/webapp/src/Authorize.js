@@ -12,7 +12,6 @@ const Authorize = ({ component: Component, signedIn, currentURL, ...rest }) => (
                 pathname: '/login',
                 state: { from: props.location }
             }} />
-
     )} />
 )
 

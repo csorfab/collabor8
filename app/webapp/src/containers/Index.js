@@ -11,6 +11,8 @@ class Index extends React.Component {
     }
 
     handleChange(event) {
+        const { name, value } = event
+        
         
     }
 
