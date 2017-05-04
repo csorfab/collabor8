@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import SessionView from './components/SessionView'
 import NavBar from './containers/Nav'
 import Authenticate from './Authenticate'
@@ -17,11 +17,11 @@ class App extends React.Component {
                 <Router>
                     <div>
                         <NavBar>
-                            <SessionView
+                            <Route render={p => <SessionView
                                 session={this.props.session}
                                 onSignIn={this.props.signIn}
-                                onSignOut={this.props.signOut}
-                            />
+                                onSignOut={this.props.signOut} 
+                            />} />
                         </NavBar>
                         <Routes />
                         <hr />

@@ -58,8 +58,6 @@ class SessionManager extends React.Component {
   managerSignedIn(method, authToken) {
     const { session, authenticate } = this.props
 
-    console.log('BASZ', this, method, 'VBASZ')
-
     this.managers[method].signedIn = true
     this.managers[method].authToken = authToken
 

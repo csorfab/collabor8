@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react'
 import { Link } from 'react-router-dom'
-import { Dropdown, FetchingIcon } from './Misc'
+import { Dropdown, FetchingIcon, ActionLink } from './Misc'
+
+
 
 export class SessionView extends React.Component {
     static propTypes = {
@@ -15,7 +17,7 @@ export class SessionView extends React.Component {
         return (
             <Dropdown title={<FetchingIcon isFetching={session.isFetching}>{session.user.name}</FetchingIcon>}>
                 <li><Link to={'/user/' + session.user.id}>Settings</Link></li>
-                <li><a href='#' onClick={() => onSignOut(session.authInfo.method)}>Sign out</a></li>
+                <li><ActionLink onClick={() => onSignOut(session.authInfo.method)}>Sign out</ActionLink></li>
             </Dropdown>
         )
     }
@@ -26,7 +28,7 @@ export class SessionView extends React.Component {
         return (
             <Dropdown title={<FetchingIcon isFetching={session.isFetching}>Sign in</FetchingIcon>}>
                 <li>
-                    <Link onClick={() => onSignIn('google')} to="#">Google</Link>
+                    <ActionLink onClick={() => { onSignIn('google') }}>Google</ActionLink>
                 </li>
                 <li>
                     <form style={{ margin: '10px' }}>

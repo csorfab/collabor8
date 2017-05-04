@@ -5,19 +5,12 @@ import OfferEdit from './containers/OfferEdit'
 import OfferView from './containers/OfferView'
 import Index from './containers/Index'
 import Authorize from './Authorize'
-
-function Login() {
-    return (
-        <div>
-            login
-            </div>
-    )
-}
+import SignIn from './containers/SignIn'
 
 export function Routes() {
     return (
         <Switch>
-            <Route exact path="/login" component={Login} />
+            <Route exact path="/signin" component={SignIn} />
             <Route exact path="/user/:userid" component={UserEdit} />
             <Route exact path="/offer/view/:offerid" component={OfferView} />
             <Authorize path="/offer/edit/:offerid" component={OfferEdit} />

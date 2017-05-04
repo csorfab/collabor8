@@ -2,11 +2,15 @@ import React, { PropTypes } from 'react';
 import InlineEdit from 'react-edit-inline'
 import black from '../images/ajax-loader.gif'
 import white from '../images/ajax-loader-white.gif'
+import { Link } from 'react-router-dom'
 
 export const wordCount = (string) => string.split(' ').length
 export const truncateString = (string, maxWords) => string.split(' ').filter((x, i) => i < maxWords).join(' ')
 
 export const If = (props) => props.condition ? props.children : null
+
+export const ActionLink = ({ onClick, to, ...rest }) =>
+  <Link onClick={(e) => { e.preventDefault(); onClick(e) }} to="#" {...rest} />
 
 export class Truncate extends React.Component {
   static propTypes = {

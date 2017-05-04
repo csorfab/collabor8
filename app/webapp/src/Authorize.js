@@ -9,7 +9,7 @@ const Authorize = ({ component: Component, signedIn, currentURL, ...rest }) => (
             <Component {...props} />
             :
             <Redirect to={{
-                pathname: '/login',
+                pathname: '/signin',
                 state: { from: props.location }
             }} />
     )} />
