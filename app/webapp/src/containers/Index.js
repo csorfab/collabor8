@@ -65,6 +65,7 @@ class Index extends React.Component {
                                 <Field
                                     type="number"
                                     name="radius"
+                                    value={this.state.radius}
                                     onChange={this.handleChange}
                                     inputClass="form-control landingMainLocation"
                                     editable={true}
@@ -73,6 +74,7 @@ class Index extends React.Component {
                                 <Field
                                     type="number"
                                     name="minParticipants"
+                                    value={this.state.minParticipants}
                                     onChange={this.handleChange}
                                     inputClass="form-control landingMainLocation"
                                     editable={true}

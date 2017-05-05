@@ -41,21 +41,9 @@ class Field extends React.Component {
         }
     }
 
-    validators = {
-        number: function (number) {
-            if (isNaN(number)) throw 'Invalid number'
-            return true
-        },
-        date: function (date) {
-            return true
-        },
-        default: () => true
-    }
-
     eventFormatters = {
         date: (moment) => moment.format('YYYY-MM-DD'),
-        textarea: (event) => event.target.value,
-        number: (event) => Number(event.target.value),
+        number: (event) => (n => isNaN(n) ? '' : n)(Number(event.target.value)),
         geosuggest: (value) => {
             const { label, placeId, location } = value
             return { label, placeId, location }
@@ -182,31 +170,21 @@ class Field extends React.Component {
         const eventFormatter = typeof this.eventFormatters[type] === 'function'
             ? this.eventFormatters[type]
             : this.eventFormatters.default
-
-        const validate = typeof this.props.validator === 'function'
-            ? this.props.validator
-            : typeof this.validators[type] === 'function'
-                ? this.validators[type]
-                : this.validators.default
-
-        let value = eventFormatter(event, this.props.value)
-
-        try {
-            validate(value)
-        } catch (e) {
-            return false
-        }
+        
+        const value = eventFormatter(event, this.props.value)
 
         onChange({ name, value })
     }
 
     render() {
-        const props = { ...this.props, id: this.state.id }
+        let props = { ...this.props, id: this.state.id }
         const { id, type, labelClass, title, controlClass, blockClass, viewOnly } = props
 
         const editable = typeof props.editable === 'undefined' ? true : props.editable
         const views = editable ? this.editorViews : this.views
 
+        props.value = (typeof props.value === 'undefined') ? '' : props.value
+        
         const view = this.getView(views, props)
         if (view === false)
             throw '[Field] Invalid type \''+ type +'\'.'

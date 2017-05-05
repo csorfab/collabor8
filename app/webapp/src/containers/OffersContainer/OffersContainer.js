@@ -26,17 +26,19 @@ class OffersContainer extends React.Component {
 
     if (!filter)
       filter = () => true
-
+    
+    const filteredOffers = offers.filter(filter)
+    
     return (
       <div>
         <div className="col-md-offset-2 col-md-9">
-          <FetchingIcon isFetching={isFetching} color="white" />
+          <h4 style={{marginBottom: '20px'}}><FetchingIcon isFetching={isFetching} color="white" />{filteredOffers.length} offers available</h4>
           <CSSTransitionGroup
             transitionName="fade"
             transitionEnterTimeout={300}
             transitionLeaveTimeout={300}
           >
-            {offers.filter(filter).map((offer) => <Offer offer={offer} key={'OFFER_' + offer.id} onChange={this.changeHandler} view="item" />)}
+            {filteredOffers.map((offer) => <Offer offer={offer} key={'OFFER_' + offer.id} onChange={this.changeHandler} view="item" />)}
           </CSSTransitionGroup>
         </div>
         <div>
