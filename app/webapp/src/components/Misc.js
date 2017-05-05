@@ -60,6 +60,18 @@ export function objFilter(obj, predicate) {
     .reduce((res, key) => ({ ...res, [key]: obj[key] }), {})
 }
 
+export function objMap(obj, predicate) {
+  return Object.keys(obj)
+    .map((key) => predicate(obj[key], key))
+    .reduce((res, key) => ({ ...res, [key]: obj[key] }), {})
+}
+
+export function objReduce(obj, predicate, initialValue) {
+  return Object.keys(obj)
+    .reduce((prev, key) => predicate(prev, obj[key]), initialValue)
+    // .reduce((res, key) => ({ ...res, [key]: obj[key] }), {})
+}
+
 export function InlineEditable(props) {
   const { editable } = props
 
