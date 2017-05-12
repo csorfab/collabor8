@@ -1,17 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Redirect } from 'react-router-dom'
 import Offer, { blankOffer } from '../components/Offer'
 import { fetchOffers, saveOffer } from '../actions'
 import { findOffer } from '../components/Offers'
 
 class OfferEdit extends React.Component {
     state = {}
-    
+
     save() {
         const { saveOffer } = this.props
         const { offer } = this.state
-
-        console.log(offer)
 
         saveOffer(offer, (offer) => {   // callback hack (?)
             if (offer)
@@ -28,10 +27,10 @@ class OfferEdit extends React.Component {
     }
 
     receiveOfferid(props) {
-        const offerid = props.match.params.offerid || -1
-        const offer = props.offer || blankOffer(props.session)   
-        
-        return {offer, offerid}
+        const offerid = Number(props.match.params.offerid) || -1
+        const offer = props.offer || blankOffer(props.session)
+
+        return { offer, offerid }
     }
 
     handleChange(event) {
@@ -54,13 +53,13 @@ class OfferEdit extends React.Component {
 
         if (props.match.params.offerid !== this.state.offerid) {
             this.setState(this.receiveOfferid(props))
-        }        
-        
+        }
+
         if (offer && (offer.id !== this.state.offer.id)) {
             this.setState({ offer })
         }
 
-        if (session.signedIn && this.state.offerid == -1) {
+        if (session.signedIn && this.state.offerid === -1) {
             this.setState({
                 offer: {
                     ...this.state.offer,
@@ -71,31 +70,37 @@ class OfferEdit extends React.Component {
         }
     }
 
+
+
     render() {
-        const { session } = this.props
+        const { session, offers } = this.props
         const { offer, offerid } = this.state
-        
+
+        const offerDoesntExist = offerid >= 0 && offer.id === -1 && offers.items.length > 0
         const canEdit = session.signedIn && offer.user_id === session.user.id
 
+        if (offerDoesntExist)
+            return (<Redirect to="/offer/new" />)
+
         if (!canEdit)
-            return 'permission denied'    
-        
-        return (           
+            return (<Redirect to={"/offer/view/" + offerid} />)
+
+        return (
             <div>
                 <div className="jumbotron">
                     <div className="container">
-                        <h1>{offerid == -1 ? 'Post a new resource offer' : 'Edit your resource offer'}</h1>
+                        <h1>{offerid === -1 ? 'Post a new resource offer' : 'Edit your resource offer'}</h1>
                         <Offer offer={offer} view="full" editing={true} onSave={this.save} onChange={this.handleChange} />
                     </div>
-                </div> 
+                </div>
             </div>
         )
     }
 }
 
 function mapStateToProps(state, props) {
-    const { session, offers } = state    
-    return { session, offer: findOffer(props.match.params.offerid, offers) }
+    const { session, offers } = state
+    return { session, offer: findOffer(props.match.params.offerid, offers), offers }
 }
 
 function mapDispatchToProps(dispatch) {
@@ -104,7 +109,7 @@ function mapDispatchToProps(dispatch) {
             dispatch(fetchOffers())
         },
         saveOffer: (offer, callback) => {
-            dispatch(saveOffer(offer, callback)) 
+            dispatch(saveOffer(offer, callback))
         }
     }
 }

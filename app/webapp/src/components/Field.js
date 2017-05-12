@@ -43,7 +43,7 @@ class Field extends React.Component {
 
     eventFormatters = {
         date: (moment) => moment.format('YYYY-MM-DD'),
-        number: (event) => (n => isNaN(n) ? '' : n)(Number(event.target.value)),
+        number: (event, currentValue) => (n => isNaN(n) ? currentValue : n)(Number(event.target.value)),
         geosuggest: (value) => {
             const { label, placeId, location } = value
             return { label, placeId, location }
@@ -97,7 +97,7 @@ class Field extends React.Component {
                         name={p.id}
                         value={choice.value}
                         onChange={this.handleChange}
-                        checked={choice.value == p.value}
+                        checked={choice.value === p.value}
                     />
                     {choice.label}
                 </label>
@@ -120,7 +120,7 @@ class Field extends React.Component {
                     <input type="checkbox"
                         value={choice.value}
                         onChange={this.handleChange}
-                        checked={p.value[choice.value] === 'true'}
+                        checked={String(p.value[choice.value]) === 'true'}
                     />
                     {choice.label}
                 </label>
@@ -146,12 +146,12 @@ class Field extends React.Component {
         {
             matches: ['radio'],
             view: (p) => <input id={p.id} type="text" style={{ border: '0' }} readOnly={true} value={
-                p.choices.reduce((prev, curr) => curr.value == p.value ? curr.label : prev, 'N/A')
+                p.choices.reduce((prev, curr) => curr.value === p.value ? curr.label : prev, 'N/A')
             } />
         },
         {
             matches: ['checkboxes'],
-            view: (p) => p.value ? p.choices.filter((choice) => p.value[choice.value] == 'true').map((choice) => choice.label).join(', ') : ' '
+            view: (p) => p.value ? p.choices.filter((choice) => String(p.value[choice.value]) === 'true').map((choice) => choice.label).join(', ') : ' '
         }
     ]
 
