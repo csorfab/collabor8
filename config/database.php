@@ -58,7 +58,7 @@ return [
         'pgsql' => [
             'driver' => 'pgsql',
             'host' => env('DB_HOST', $CLEARDB_URL_ARR ? $CLEARDB_URL_ARR['host'] : '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
+            'port' => env('DB_PORT', $CLEARDB_URL_ARR ? $CLEARDB_URL_ARR['port'] : '5432'),
             'database' => env('DB_DATABASE', $CLEARDB_URL_ARR ? substr($CLEARDB_URL_ARR['path'], 1) : 'forge'),
             'username' => env('DB_USERNAME', $CLEARDB_URL_ARR ? $CLEARDB_URL_ARR['user'] : 'forge'),
             'password' => env('DB_PASSWORD', $CLEARDB_URL_ARR ? $CLEARDB_URL_ARR['pass'] : ''),
