@@ -22,10 +22,10 @@ class CreateOffersTable extends Migration
             $table->json('location');
             $table->string('testMethods')->nullable();
             $table->string('devices')->nullable();
-            $table->string('payment');
+            $table->text('payment');
             $table->string('languageNative');
             $table->string('languageSecond')->nullable();
-            $table->string('additional')->nullable();
+            $table->text('additional')->nullable();
             $table->integer('user_id');
             $table->timestamps();
         });
