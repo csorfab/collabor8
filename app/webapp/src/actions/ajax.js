@@ -1,4 +1,4 @@
-const ajax_host = 'http://backend.collabor8.edu/api'
+const ajax_host = 'https://collabora.herokuapp.com/api'
 
 export const ajaxRequest = (url, authInfo, params) => {
     let $ = window.jQuery
