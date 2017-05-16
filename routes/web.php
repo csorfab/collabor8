@@ -154,7 +154,9 @@ Route::group(['middleware' => ['auth.oauth','cors']], function(){
 }
 );
 
-Route::get('/{any?}', function(){
+// ocsmany hekk pfff
+
+Route::get('/{x?}/{y?}/{z?}/{a?}/{b?}', function(){
 	return File::get(app_path('webapp/build/index.html'));
 }
 );
